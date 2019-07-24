@@ -1,11 +1,14 @@
 package com.ddl.web.system.user.service;
 
-import com.ddl.web.system.user.domain.User;
-import com.ddl.web.system.user.mapper.UserMapper;
+import com.ddl.web.system.user.domain.SysUser;
+import com.ddl.web.system.user.mapper.SysUserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户 业务层处理
@@ -13,12 +16,10 @@ import org.springframework.stereotype.Service;
  * @author school
  */
 @Service
-public class UserServiceImpl implements IUserService
-{
-    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+public class UserServiceImpl implements IUserService {
 
     @Autowired
-    private UserMapper userMapper;
+    private SysUserMapper userMapper;
 
     /**
      * 通过用户ID查询用户
@@ -27,8 +28,22 @@ public class UserServiceImpl implements IUserService
      * @return 用户对象信息
      */
     @Override
-    public User selectUserById(Long userId)
-    {
-        return userMapper.selectUserById(userId);
+    public SysUser selectUserById(Integer userId) {
+        return userMapper.selectByPrimaryKey(userId);
+    }
+
+    /**
+     * 登录
+     * @param loginName 登陆名
+     * @param password 密码
+     * @return
+     */
+    @Override
+    public SysUser selectByLoginNameAndPassword(String loginName, String password) {
+        Map<String, Object> query = new HashMap<>();
+        query.put("loginName", loginName);
+        query.put("password", password);
+        SysUser user = userMapper.selectByLoginNameAndPassword(query);
+        return user;
     }
 }

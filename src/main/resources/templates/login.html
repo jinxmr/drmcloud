@@ -32,24 +32,22 @@
 </div>
 </body>
 
-<script src="../static/jquery/jquery.min.js" th:src="@{/static/jquery/jquery.min.js}" ></script>
-<script src="../static/login/js/particles.js" th:src="@{/static/login/js/particles.js}" ></script>
-<script src="../static/login/js/app.js" th:src="@{/static/login/js/app.js}" ></script>
+<script src="../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}" ></script>
+<script src="../static/login/js/particles.js" th:src="@{/login/js/particles.js}" ></script>
+<script src="../static/login/js/app.js" th:src="@{/login/js/app.js}" ></script>
 <script th:inline="javascript"> var ctx = [[@{/}]]; var captchaType = [[${captchaType}]]; </script>
 <script type="text/javascript">
     function doLogin() {
         var userName = $('#userName').val();
         var password = $('#password').val();
         $.ajax({
-            type: "get",
+            type: "post",
             async: false,
             url: ctx+"back/dologin?userName=" + userName + "&password=" + password + "&" + "t=" + Math.random(),
             dataType: "json",
             success: function (data) {
-                //alert(data.result);
-                //showErrors(data.result);
-                if (data.status == 0) {
-                    alert(data.result);
+                if (data.code == 500) {
+                    alert(data.msg);
                 } else {
                     window.location.href = ctx+"back/index";
                 }
