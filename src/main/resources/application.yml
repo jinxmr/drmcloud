@@ -8,3 +8,8 @@ spring:
     encoding: UTF-8
     mode: HTML5
     cache: false
+
+# 日志配置
+logging:
+  level:
+    com.ddl: debug
