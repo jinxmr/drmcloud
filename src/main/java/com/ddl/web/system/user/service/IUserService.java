@@ -19,9 +19,6 @@ public interface IUserService {
 
     /**
      * 登录
-     * @param loginName 登陆名
-     * @param password 密码
-     * @return
      */
-    SysUser selectByLoginNameAndPassword(String loginName, String password);
+    public SysUser login(String username);
 }

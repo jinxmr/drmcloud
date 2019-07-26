@@ -69,7 +69,6 @@ public class Word2Html {
         Elements div = doc.getElementsByTag("div");
 
         Element node = table.get(table.size() - 1);
-        //System.out.println(node);
         //把页眉替换到头部
         Element child = div.first().child(0);
         child.before(node.toString());
@@ -140,9 +139,6 @@ public class Word2Html {
 
         Range overallRange = wordDocument.getOverallRange(); //页眉页脚
 
-        System.out.println(wordDocument);
-
-
         WordToHtmlConverter wordToHtmlConverter = new WordToHtmlConverter(
                 DocumentBuilderFactory.newInstance().newDocumentBuilder()
                         .newDocument());
@@ -167,7 +163,6 @@ public class Word2Html {
                 byte[] content = pic.getContent();
                 if(mimeType.toLowerCase().equals("image/x-emf")) {
                     InputStream is = new ByteArrayInputStream(content);
-                    getImageString(content);
                     byte[] bytes = emfToPng(is);
                     BASE64Encoder encoder = new BASE64Encoder();
                     String str = encoder.encode(bytes).trim();
@@ -218,16 +213,17 @@ public class Word2Html {
 
             final int width = (int)emf.readHeader().getBounds().getWidth();
             final int height = (int)emf.readHeader().getBounds().getHeight();
-            final BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
+            final BufferedImage result = new BufferedImage(width+60, height+40, BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g2 = (Graphics2D)result.createGraphics();
             emfRenderer.paint(g2);
-
+            //开启文字抗锯齿
+            //g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
             //创建储存图片二进制流的输出流
             baos = new ByteArrayOutputStream();
             //创建ImageOutputStream流
             imageOutputStream = ImageIO.createImageOutputStream(baos);
             //将二进制数据写进ByteArrayOutputStream
-            ImageIO.write(result, "png", imageOutputStream);
+            ImageIO.write(result, "jpg", imageOutputStream);
             //inputStream = new ByteArrayInputStream(baos.toByteArray());
             by=baos.toByteArray();
         } catch (FileNotFoundException e) {

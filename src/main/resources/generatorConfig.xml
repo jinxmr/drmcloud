@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="D:/apache-maven-3.5.0/repositoryo/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar"/>
+    <classPathEntry location="D:/maven/mysql/mysql-connector-java/5.1.46/mysql-connector-java-5.1.46.jar"/>
 
     <context id="DB2Tables" targetRuntime="MyBatis3">
 
@@ -29,21 +29,23 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="com.ddl.system.user.domain" targetProject="D:/mybatis-gen">
+        <javaModelGenerator targetPackage="com.ddl.web.system.user.domain" targetProject="D:/mybatis-gen">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mapper.ddl.system.user" targetProject="D:/mybatis-gen">
+        <sqlMapGenerator targetPackage="mapper.ddl.web.system.user" targetProject="D:/mybatis-gen">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ddl.system.user.mapper" targetProject="D:/mybatis-gen">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.ddl.web.system.user.mapper" targetProject="D:/mybatis-gen">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!-- 区域 -->
-        <table tableName="sys_user" domainObjectName="SysUser">
+        <table tableName="sys_role" domainObjectName="SysRole">
+        </table>
+        <table tableName="sys_menu" domainObjectName="SysMenu">
         </table>
     </context>
 </generatorConfiguration>			

@@ -4,6 +4,11 @@ import com.ddl.model.AjaxResult;
 import com.ddl.utils.Md5Utils;
 import com.ddl.web.system.user.domain.SysUser;
 import com.ddl.web.system.user.service.IUserService;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +24,8 @@ public class LoginController {
     @Autowired
     private IUserService userService;
 
-    @GetMapping("toLogin")
-    public String toLogin(){
+    @GetMapping("login")
+    public String toLogin() {
         return "login";
     }
 
@@ -28,13 +33,23 @@ public class LoginController {
     @PostMapping("dologin")
     public AjaxResult dologin(HttpServletRequest request, HttpServletResponse response, Model model,
                               @RequestParam String userName, @RequestParam String password) {
-        String md5Str = Md5Utils.getMD5Str(password);
-        SysUser user = userService.selectByLoginNameAndPassword(userName, md5Str);
-        return null == user ? AjaxResult.error("密码错误") : AjaxResult.success();
+
+        UsernamePasswordToken token = new UsernamePasswordToken(userName, password, false);
+        Subject subject = SecurityUtils.getSubject();
+        try {
+            subject.login(token);
+            return AjaxResult.success();
+        } catch (AuthenticationException e) {
+            String msg = "用户或密码错误";
+            if (StringUtils.isNotEmpty(e.getMessage())) {
+                msg = e.getMessage();
+            }
+            return AjaxResult.error(msg);
+        }
     }
 
     @GetMapping("index")
-    public String index(Model model,HttpServletRequest request) {
+    public String index(Model model, HttpServletRequest request) {
 
         return "index";
     }

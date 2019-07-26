@@ -2,6 +2,7 @@ package com.ddl.web.system.user.domain;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class SysUser implements Serializable {
     private Integer id;
@@ -38,7 +39,25 @@ public class SysUser implements Serializable {
 
     private Integer sex;
 
+    private List<SysRole> roles;
+
+    /** 角色组 */
+    private Long[] roleIds;
+
+    /** 岗位组 */
+    private Long[] postIds;
+
     private static final long serialVersionUID = 1L;
+
+    public boolean isAdmin()
+    {
+        return isAdmin(this.id);
+    }
+
+    public static boolean isAdmin(Integer userId)
+    {
+        return userId != null && 1L == userId;
+    }
 
     public Integer getId() {
         return id;
