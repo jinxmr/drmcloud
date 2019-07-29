@@ -339,7 +339,7 @@
   <select id="selectPermsByUserId" parameterType="Integer" resultType="String">
 		select distinct m.perms
 		from sys_menu m
-			 left join sys_role_menu rm on m.menu_id = rm.menu_id
+			 left join sys_role_menu rm on m.id = rm.menu_id
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 		where ur.user_id = #{userId}
 	</select>
