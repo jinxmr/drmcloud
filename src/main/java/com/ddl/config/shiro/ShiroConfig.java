@@ -67,13 +67,13 @@ public class ShiroConfig {
      *
      * @return
      */
-    @Bean
+    /*@Bean
     public HashedCredentialsMatcher hashedCredentialsMatcher() {
         HashedCredentialsMatcher hashedCredentialsMatcher = new HashedCredentialsMatcher();
         hashedCredentialsMatcher.setHashAlgorithmName("MD5");//散列算法:这里使用MD5算法;
         hashedCredentialsMatcher.setHashIterations(2);//散列的次数，比如散列两次，相当于 md5(md5(""));
         return hashedCredentialsMatcher;
-    }
+    }*/
 
     /**
      * 自定义Realm
@@ -81,7 +81,7 @@ public class ShiroConfig {
     @Bean
     public MyShiroRealm myShiroRealm() {
         MyShiroRealm myShiroRealm = new MyShiroRealm();
-        myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
+        //myShiroRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return myShiroRealm;
     }
 

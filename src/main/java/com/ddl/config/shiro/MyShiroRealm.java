@@ -11,6 +11,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,9 +71,9 @@ public class MyShiroRealm extends AuthorizingRealm {
         UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         //获取userName
         String username = upToken.getUsername();
-
-        SysUser user = userService.login(username);
-        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, user.getPassword(), getName());    //password是指从数据库获取的password
+        String password = String.valueOf(upToken.getPassword());
+        SysUser user = userService.login(username, password);
+        SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(user, password, getName());    //password是指从数据库获取的password
         return info;
     }
 

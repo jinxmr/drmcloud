@@ -20,5 +20,5 @@ public interface IUserService {
     /**
      * 登录
      */
-    public SysUser login(String username);
+    public SysUser login(String username, String password);
 }
