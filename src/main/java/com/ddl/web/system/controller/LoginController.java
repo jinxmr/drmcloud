@@ -39,8 +39,8 @@ public class LoginController {
         try {
             subject.login(token);
             return AjaxResult.success();
-        } catch (AuthenticationException e) {
-            String msg = "用户或密码错误";
+        } catch (Exception e) {
+            String msg = "用户名或密码错误";
             if (StringUtils.isNotEmpty(e.getMessage())) {
                 msg = e.getMessage();
             }

@@ -3,6 +3,7 @@ package com.ddl.web.system.user.service;
 import com.ddl.web.enums.UserDictEnums;
 import com.ddl.web.system.user.domain.SysUser;
 import com.ddl.web.system.user.mapper.SysUserMapper;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.crypto.hash.Md5Hash;
@@ -57,7 +58,7 @@ public class UserServiceImpl implements IUserService {
         }
         //用户密码错误
         if (!matches(user, password)) {
-            throw new RuntimeException("密码错误");
+            throw new AuthenticationException("密码错误");
         }
         return user;
     }
