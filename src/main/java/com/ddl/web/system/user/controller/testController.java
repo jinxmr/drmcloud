@@ -18,7 +18,7 @@ public class testController {
     private IUserService userService;
 
     @GetMapping("sysUser")
-    @RequiresPermissions("sys:user")
+    @RequiresPermissions("sys:user:view")
     @ResponseBody
     public String test() {
         SysUser user = userService.selectUserById(1);

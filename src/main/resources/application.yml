@@ -12,4 +12,18 @@ spring:
 # 日志配置
 logging:
   level:
-    com.ddl: debug
+    com.ddl.web.system.generater.mapper: debug
+  file:
+    max-size: 50M
+
+gen:
+  author: drm
+  packageName: com.ddl.web.system
+  autoRemovePre: true
+  tablePrefix: sys_
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql

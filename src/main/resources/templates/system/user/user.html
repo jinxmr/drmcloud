@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <link rel="stylesheet" href="../../../static/layuiadmin/layui/css/layui.css"
+          th:href="@{/static/layuiadmin/layui/css/layui.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/layuiadmin/style/admin.css"
+          th:href="@{/static/layuiadmin/style/admin.css}"
+          media="all">
+</head>
+<body>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+    </div>
+</script>
+
+<script type="text/html" th:inline="javascript" id="barDemo">
+    var removeFlag = [[${@permission.hasPermi('sys:user:remove')}]];
+</script>
+
+
+<script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/static/layuiadmin/layui/layui.js}"></script>
+<script th:inline="none">
+    layui.use('table', function () {
+        var table = layui.table;
+
+        table.render({
+            elem: '#test'
+            , url: '/back/sysUser/list'
+            , toolbar: '#toolbarDemo'
+            , title: '用户数据表'
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', unresize: true, sort: true, fixed: 'left', unresize: true}
+                , {field: 'name', title: '用户名'}
+                , {field: 'loginName', title: '登录账号'}
+                , {field: 'email', title: '邮箱'}
+                , {field: 'mobile', title: '手机号'}
+                , {field: 'createDate', title: '创建时间', sort: true}
+                , {field: 'right', title: '操作', toolbar: "#barDemo"}
+            ]]
+            , page: true
+            , height: 'full-200'
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'getCheckData':
+                    var data = checkStatus.data;
+                    layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.prompt({
+                    formType: 2
+                    , value: data.email
+                }, function (value, index) {
+                    obj.update({
+                        email: value
+                    });
+                    layer.close(index);
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

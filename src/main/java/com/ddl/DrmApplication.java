@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("com.ddl.web.system.user.mapper")
+@MapperScan("com.ddl.web.system.*.mapper")
 public class DrmApplication {
 
 	public static void main(String[] args) {

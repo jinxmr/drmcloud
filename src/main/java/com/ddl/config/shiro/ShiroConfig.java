@@ -1,11 +1,6 @@
 package com.ddl.config.shiro;
 
 import com.ddl.filter.LogoutFilter;
-import org.apache.commons.compress.utils.IOUtils;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
-import org.apache.shiro.config.ConfigurationException;
-import org.apache.shiro.io.ResourceUtils;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -15,9 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import javax.servlet.Filter;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -166,7 +158,7 @@ public class ShiroConfig {
         SimpleMappingExceptionResolver r = new SimpleMappingExceptionResolver();
         Properties mappings = new Properties();
         mappings.setProperty("DatabaseException", "databaseError");//数据库异常处理
-        mappings.setProperty("UnauthorizedException", "/user/403");
+        mappings.setProperty("UnauthorizedException", "/error/403");
         r.setExceptionMappings(mappings);  // None by default
         r.setDefaultErrorView("error");    // No default
         r.setExceptionAttribute("exception");     // Default is "exception"

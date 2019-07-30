@@ -102,13 +102,13 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd data-name="console" class="layui-this">
-                                <a href="back/test">控制台</a>
+                                <a th:attr="lay-href=@{/back/sysUse1r}">控制台</a>
                             </dd>
                             <dd data-name="console">
                                 <a th:attr="lay-href=@{/back/sysUser}">主页一</a>
                             </dd>
                             <dd data-name="console">
-                                <a th:attr="lay-href=@{/back/test1}">主页二</a>
+                                <a th:attr="lay-href=@{/back/tool/gen}">代码生成</a>
                             </dd>
                         </dl>
                     </li>
