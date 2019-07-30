@@ -11,7 +11,7 @@
  Target Server Version : 50725
  File Encoding         : 65001
 
- Date: 26/07/2019 16:35:56
+ Date: 30/07/2019 09:28:21
 */
 
 SET NAMES utf8mb4;
@@ -144,7 +144,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', '5ed9263549370b402ac59ac10593c39a', NULL, '靳祥民', '12@3.com', '17635672203', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563512518224&di=fd2148a2f3f47501eb3871da6ac23909&imgtype=0&src=http%3A%2F%2Fs2.sinaimg.cn%2Fmw690%2F006hikKrzy7sly8VuDfb1%26690', '0.0.0.0', '2019-07-19 10:14:22', '2019-07-19 10:14:26', '2019-07-19 10:14:29', NULL, 0, NULL, NULL, NULL);
+INSERT INTO `sys_user` VALUES (1, 'admin', 'c6ac59a147fa349f1032c521b7e521a3', NULL, '靳祥民', '12@3.com', '17635672203', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563512518224&di=fd2148a2f3f47501eb3871da6ac23909&imgtype=0&src=http%3A%2F%2Fs2.sinaimg.cn%2Fmw690%2F006hikKrzy7sly8VuDfb1%26690', '0.0.0.0', '2019-07-19 10:14:22', '2019-07-19 10:14:26', '2019-07-19 10:14:29', NULL, 0, NULL, 0, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role

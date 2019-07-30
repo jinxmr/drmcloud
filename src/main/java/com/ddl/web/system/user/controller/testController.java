@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("sysUser")
+@RequestMapping("back")
 public class testController {
 
     @Autowired
     private IUserService userService;
 
-    @GetMapping("list")
-    @RequiresPermissions("user:list")
+    @GetMapping("sysUser")
+    @RequiresPermissions("sys:user")
     @ResponseBody
     public String test() {
         SysUser user = userService.selectUserById(1);
