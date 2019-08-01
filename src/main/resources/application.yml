@@ -8,6 +8,9 @@ spring:
     encoding: UTF-8
     mode: HTML5
     cache: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
 
 # 日志配置
 logging:
@@ -27,3 +30,11 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
+
+#mybatis:
+#  # 指定搜索包别名
+#  typeAliasesPackage: com.ddl
+#  # 配置mapper的扫描 找到所有的mapper映射文件
+#  mapperLocations: classpath*:mapper/**/*.xml
+#  # 加载全局的配置文件
+#  configLocation: classpath:mybatis/mybatis-config.xml

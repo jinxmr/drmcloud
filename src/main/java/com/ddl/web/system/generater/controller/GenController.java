@@ -37,10 +37,12 @@ public class GenController extends BaseController {
     @RequiresPermissions("tool:gen:list")
     @PostMapping("/list")
     @ResponseBody
-    public TableDataInfo list(TableInfo tableInfo, @PathVariable("pageNum")Integer pageNum, @PathVariable("pageSize")Integer pageSize) {
-        PageHelper.startPage(0, 10);
+    public TableDataInfo list(TableInfo tableInfo,@RequestParam(required=false,defaultValue="1")Integer pageNum,
+                              @RequestParam(required=false,defaultValue="10")Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
         List<TableInfo> list = genService.selectTableList(tableInfo);
-        return getDataTable(list);
+        TableDataInfo dataTable = getDataTable(list);
+        return dataTable;
     }
 
     /**

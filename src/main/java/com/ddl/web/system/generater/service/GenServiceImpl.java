@@ -44,7 +44,8 @@ public class GenServiceImpl implements IGenService {
      */
     @Override
     public List<TableInfo> selectTableList(TableInfo tableInfo) {
-        return genMapper.selectTableList(tableInfo);
+        List<TableInfo> tableInfos = genMapper.selectTableList(tableInfo);
+        return tableInfos;
     }
 
     /**

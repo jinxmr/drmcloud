@@ -10,9 +10,10 @@
 	</parent>
 	<groupId>com.ddl</groupId>
 	<artifactId>drm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>drm</name>
-	<description>Demo project for Spring Boot</description>
+	<packaging>jar</packaging>
+	<description>Spring Boot Try</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -154,28 +155,6 @@
 			<artifactId>freehep-io</artifactId>
 			<version>2.2.2</version>
 		</dependency>
-		<!-- wmf转svg转png -->
-		<dependency>
-			<groupId>xml-apis</groupId>
-			<artifactId>xml-apis-ext</artifactId>
-			<version>1.3.04</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>net.arnx</groupId>
-			<artifactId>wmf2svg</artifactId>
-			<version>0.9.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.w3c</groupId>
-			<artifactId>dom</artifactId>
-			<version>2.3.0-jaxb-1.0.6</version>
-		</dependency>
-		<dependency>
-			<groupId>ru.ilb.w3c</groupId>
-			<artifactId>w3c</artifactId>
-			<version>1.1</version>
-		</dependency>
 
 		<!--Shiro核心框架 -->
 		<dependency>
@@ -228,17 +207,21 @@
 		<dependency>
 			<groupId>com.github.pagehelper</groupId>
 			<artifactId>pagehelper-spring-boot-starter</artifactId>
-			<version>1.2.5</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.pagehelper</groupId>
-			<artifactId>pagehelper</artifactId>
-			<version>4.1.3</version>
+			<version>1.2.12</version>
 		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -252,6 +235,15 @@
 					<configurationFile>src/main/resources/generatorConfig.xml</configurationFile>
 					<verbose>true</verbose>
 					<overwrite>true</overwrite>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>
