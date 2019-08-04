@@ -1,7 +1,9 @@
 package com.ddl.web.system.user.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SysMenu implements Serializable {
     private Integer id;
@@ -29,6 +31,9 @@ public class SysMenu implements Serializable {
     private String remark;
 
     private Integer appId;
+
+    /** 子菜单 */
+    private List<SysMenu> children = new ArrayList<SysMenu>();
 
     private static final long serialVersionUID = 1L;
 
@@ -134,5 +139,13 @@ public class SysMenu implements Serializable {
 
     public void setAppId(Integer appId) {
         this.appId = appId;
+    }
+
+    public List<SysMenu> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<SysMenu> children) {
+        this.children = children;
     }
 }

@@ -50,7 +50,7 @@ CREATE TABLE `sys_menu`  (
   `order_sort` int(11) NULL DEFAULT NULL COMMENT '排序',
   `href` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求地址',
   `menu_type` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
-  `visible` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
+  `visible` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'font-awesome' COMMENT '菜单状态（0显示 1隐藏）',
   `perms` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限标识',
   `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '#' COMMENT '菜单图标',
   `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
@@ -63,17 +63,17 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, NULL, 'M', '0', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:14', '', 1);
-INSERT INTO `sys_menu` VALUES (2, '应用管理', 0, 3, NULL, 'C', '0', NULL, 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:18', '', 1);
-INSERT INTO `sys_menu` VALUES (3, '用户管理', 1, 1, '/back/sysUser', 'C', '0', 'sys:user:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:21', '', 1);
-INSERT INTO `sys_menu` VALUES (4, '角色管理', 1, 2, '/back/sysRole', 'C', '0', 'sys:role:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:23', '', 1);
-INSERT INTO `sys_menu` VALUES (5, '菜单管理', 1, 3, '/back/sysMenu', 'C', '0', 'sys:menu:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:26', '', 1);
-INSERT INTO `sys_menu` VALUES (6, '应用管理', 2, 1, '/back/app', 'C', '0', 'sys:app:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:29', '', 1);
-INSERT INTO `sys_menu` VALUES (7, '删除', 3, 1, '/back/sysUser/delUser', 'F', '0', 'sys:user:remove', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:32', '', 1);
-INSERT INTO `sys_menu` VALUES (8, '工具管理', 0, 2, '', 'M', '0', NULL, 'fa fa-gear', 'admin', '2019-07-30 11:37:04', '', 1);
-INSERT INTO `sys_menu` VALUES (9, '代码生成', 8, 1, '/back/sysTab', 'C', '0', 'tool:gen:view', 'fa fa-gear', 'admin', '2019-07-30 11:38:43', '', 1);
-INSERT INTO `sys_menu` VALUES (10, '生成代码', 9, 2, '/back/code/gen', 'F', '0', 'tool:gen:code', 'fa fa-gear', 'admin', '2019-07-30 11:41:13', '', 1);
-INSERT INTO `sys_menu` VALUES (11, '表查询', 9, 3, '/back/sysTab/list', 'C', '0', 'tool:gen:list', 'fa fa-gear', 'admin', '2019-07-30 13:43:55', '', 1);
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, NULL, 'M', 'font-awesome', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:14', '', 1);
+INSERT INTO `sys_menu` VALUES (2, '应用管理', 0, 3, NULL, 'C', 'font-awesome', NULL, 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:18', '', 1);
+INSERT INTO `sys_menu` VALUES (3, '用户管理', 1, 1, '/back/sysUser', 'C', 'font-awesome', 'sys:user:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:21', '', 1);
+INSERT INTO `sys_menu` VALUES (4, '角色管理', 1, 2, '/back/sysRole', 'C', 'font-awesome', 'sys:role:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:23', '', 1);
+INSERT INTO `sys_menu` VALUES (5, '菜单管理', 1, 3, '/back/sysMenu', 'C', 'font-awesome', 'sys:menu:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:26', '', 1);
+INSERT INTO `sys_menu` VALUES (6, '应用管理', 2, 1, '/back/app', 'C', 'font-awesome', 'sys:app:view', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:29', '', 1);
+INSERT INTO `sys_menu` VALUES (7, '删除', 3, 1, '/back/sysUser/delUser', 'F', 'font-awesome', 'sys:user:remove', 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:32', '', 1);
+INSERT INTO `sys_menu` VALUES (8, '工具管理', 0, 2, '', 'M', 'font-awesome', NULL, 'fa fa-gear', 'admin', '2019-07-30 11:37:04', '', 1);
+INSERT INTO `sys_menu` VALUES (9, '代码生成', 8, 1, '/back/sysTab', 'C', 'font-awesome', 'tool:gen:view', 'fa fa-gear', 'admin', '2019-07-30 11:38:43', '', 1);
+INSERT INTO `sys_menu` VALUES (10, '生成代码', 9, 2, '/back/code/gen', 'F', 'font-awesome', 'tool:gen:code', 'fa fa-gear', 'admin', '2019-07-30 11:41:13', '', 1);
+INSERT INTO `sys_menu` VALUES (11, '表查询', 9, 3, '/back/sysTab/list', 'C', 'font-awesome', 'tool:gen:list', 'fa fa-gear', 'admin', '2019-07-30 13:43:55', '', 1);
 
 -- ----------------------------
 -- Table structure for sys_role
@@ -95,7 +95,7 @@ CREATE TABLE `sys_role`  (
 -- ----------------------------
 -- Records of sys_role
 -- ----------------------------
-INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 0, '1', '0', 'admin', '2018-10-24 00:00:00', NULL);
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 0, '1', 'font-awesome', 'admin', '2018-10-24 00:00:00', NULL);
 
 -- ----------------------------
 -- Table structure for sys_role_menu
@@ -152,7 +152,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, 'admin', 'c6ac59a147fa349f1032c521b7e521a3', NULL, '靳祥民', '12@3.com', '17635672203', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563512518224&di=fd2148a2f3f47501eb3871da6ac23909&imgtype=0&src=http%3A%2F%2Fs2.sinaimg.cn%2Fmw690%2F006hikKrzy7sly8VuDfb1%26690', '0.0.0.0', '2019-07-19 10:14:22', '2019-07-19 10:14:26', '2019-07-19 10:14:29', NULL, 0, NULL, 0, NULL);
+INSERT INTO `sys_user` VALUES (1, 'admin', 'c6ac59a147fa349f1032c521b7e521a3', NULL, '靳祥民', '12@3.com', '17635672203', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1563512518224&di=fd2148a2f3f47501eb3871da6ac23909&imgtype=font-awesome&src=http%3A%2F%2Fs2.sinaimg.cn%2Fmw690%2F006hikKrzy7sly8VuDfb1%26690', 'font-awesome.font-awesome.font-awesome.font-awesome', '2019-07-19 10:14:22', '2019-07-19 10:14:26', '2019-07-19 10:14:29', NULL, 0, NULL, 0, NULL);
 
 -- ----------------------------
 -- Table structure for sys_user_role

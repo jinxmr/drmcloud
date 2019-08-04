@@ -9,9 +9,27 @@
           media="all">
 </head>
 <body>
+<style>
+    .layui-main {
+        margin: 15px;
+        line-height: 22px;
+    }
+</style>
+<div class="layui-main">
+    <div class="demoTable">
+        表名称：
+        <div class="layui-inline">
+            <input class="layui-input" name="id" id="tableName" autocomplete="off">
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        创建时间：
+        <div class="layui-inline">
+            <input class="layui-input" name="id" id="createTime" readonly placeholder="yyyy-MM-dd">
+        </div>
+        <button class="layui-btn" data-type="reload">搜索</button>
+    </div>
 
-<table class="layui-hide" id="test" lay-filter="test"></table>
-
+    <table class="layui-hide" id="test" lay-filter="test"></table>
+</div>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
@@ -32,9 +50,9 @@
         base: '/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use('table', function () {
+    }).use(['table','laydate'], function () {
         var table = layui.table;
-
+        var laydate = layui.laydate;
         table.render({
             elem: '#test'
             , method: 'post'
@@ -43,13 +61,9 @@
                 ,limitName: 'pageSize' //每页数据量的参数名，默认：limit
             }
             , url: ctx + 'back/tool/gen/list'
+            , contentType: 'application/json'
             , toolbar: '#toolbarDemo'
             , title: '用户数据表'
-            , initSort: {
-                field: 'id'
-                ,type: 'desc'
-            }
-
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'tableName', title: '表名称', sort: true}
@@ -62,46 +76,9 @@
             , page: true
         });
 
-        //头工具栏事件
-        table.on('toolbar(test)', function (obj) {
-            var checkStatus = table.checkStatus(obj.config.id);
-            switch (obj.event) {
-                case 'getCheckData':
-                    var data = checkStatus.data;
-                    layer.alert(JSON.stringify(data));
-                    break;
-                case 'getCheckLength':
-                    var data = checkStatus.data;
-                    layer.msg('选中了：' + data.length + ' 个');
-                    break;
-                case 'isAll':
-                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
-                    break;
-            }
-            ;
-        });
-
-        //监听行工具事件
-        table.on('tool(test)', function (obj) {
-            var data = obj.data;
-            //console.log(obj)
-            if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
-                layer.prompt({
-                    formType: 2
-                    , value: data.email
-                }, function (value, index) {
-                    obj.update({
-                        email: value
-                    });
-                    layer.close(index);
-                });
-            }
-        });
+        laydate.render({
+            elem: "#createTime"
+        })
     });
 </script>
 </body>

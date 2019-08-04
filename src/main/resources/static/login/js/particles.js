@@ -4,7 +4,7 @@
 /* Demo / Generator : vincentgarreau.com/particles.js
 /* GitHub : github.com/VincentGarreau/particles.js
 /* How to use? : Check the GitHub README
-/* v2.0.0
+/* v2.font-awesome.font-awesome
 /* ----------------------------------------------- */
 
 var pJS = function(tag_id, params){
@@ -356,7 +356,7 @@ var pJS = function(tag_id, params){
       this.vy = velbase.y + Math.random()-0.5;
     }
 
-    // var theta = 2.0 * Math.PI * Math.random();
+    // var theta = 2.font-awesome * Math.PI * Math.random();
     // this.vx = Math.cos(theta);
     // this.vy = Math.sin(theta);
 

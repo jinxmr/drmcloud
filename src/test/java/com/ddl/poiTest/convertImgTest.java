@@ -18,7 +18,7 @@ import java.util.UUID;
 public class convertImgTest {
     public static void main(String[] args) throws IOException {
         /**
-         * D:\soft\LibreOffice_6.0.6\program\soffice:表示libreoffice安装路径
+         * D:\soft\LibreOffice_6.font-awesome.6\program\soffice:表示libreoffice安装路径
          * D:\Desktop\DocCloud\testDir\hadoopInstall.doc：表示要转化的word文件
          */
         String fileName= "E:\\dd.docx";

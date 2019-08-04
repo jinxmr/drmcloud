@@ -343,4 +343,47 @@
 			 left join sys_user_role ur on rm.role_id = ur.role_id
 		where ur.user_id = #{userId}
 	</select>
+
+  <select id="selectMenusByUserId" parameterType="Long" resultMap="BaseResultMap">
+	  SELECT DISTINCT
+        m.id,
+        m.parent_id,
+        m.menu_name,
+        m.href,
+        m.perms,
+        m.menu_type,
+        m.icon,
+        m.order_sort,
+        m.create_time
+      FROM
+          sys_menu m
+          LEFT JOIN sys_role_menu rm ON m.id = rm.menu_id
+          LEFT JOIN sys_user_role ur ON rm.role_id = ur.role_id
+          LEFT JOIN sys_role ro ON ur.role_id = ro.id
+      WHERE
+          ur.user_id = #{userId} and m.menu_type in ('M', 'C') and m.visible = 0  AND ro.status = 0
+
+      ORDER BY
+          m.order_sort
+	</select>
+
+  <select id="selectMenuNormalAll" resultMap="BaseResultMap">
+	SELECT DISTINCT
+      m.id,
+      m.parent_id,
+      m.menu_name,
+      m.href,
+      m.perms,
+      m.menu_type,
+      m.icon,
+      m.order_sort,
+      m.create_time
+	FROM
+      sys_menu m
+	WHERE
+      m.menu_type IN ( 'M', 'C' )
+      AND m.visible = 0
+	ORDER BY
+      m.order_sort
+  </select>
 </mapper>
