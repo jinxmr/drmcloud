@@ -16,21 +16,22 @@
             <div class="layui-card">
                 <div class="layui-card-header">代码生成</div>
                 <div class="layui-card-body">
-
+                    <form id="articleSearch" class="layui-form layui-form-pane" method="post" action="" style="margin-top: 20px;">
                     <div class="test-table-reload-btn" style="margin-bottom: 10px;">
                         表名称：
                         <div class="layui-inline">
-                            <input class="layui-input" name="tableName" id="tableName">
+                            <input class="layui-input" name="tableName" id="tableName" autocomplete="off">
                         </div>&nbsp;&nbsp;&nbsp;&nbsp;
                         创建时间：
                         <div class="layui-inline">
                             <input class="layui-input" name="createTime" id="createTime" readonly
                                    placeholder="yyyy-MM-dd">
                         </div>
-                        <button class="layui-btn" id="searchTab" data-type="reload">搜索</button>
+                        <button class="layui-btn" id="searchTab" lay-submit="" lay-filter="searchSubmit" data-type="reload">搜索</button>
                     </div>
+                    </form>
 
-                    <table class="layui-hide" id="test" lay-filter="test"></table>
+                    <table class="layui-hide" id="tables" lay-filter="tables"></table>
                 </div>
             </div>
         </div>
@@ -45,7 +46,7 @@
     </div>
 </script>
 <script type="text/html" id="test-table-toolbar-barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="edit" shiro:hasPermission="tool:gen:code">生成代码</a>
+    <a class="layui-btn layui-btn-xs" lay-event="genCode" shiro:hasPermission="tool:gen:code">生成代码</a>
 </script>
 <script src="../../../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}"></script>
 <script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
@@ -57,32 +58,19 @@
         base: '/layuiadmin/' //静态资源所在路径
     }).extend({
         index: 'lib/index' //主入口模块
-    }).use(['table', 'laydate'], function () {
-        var kw = "";
-        addData(kw);
-        //日期插件
-        var laydate = layui.laydate;
-        laydate.render({
-            elem: "#createTime"
-        });
-    });
+    }).use(['form', 'index', 'table', 'laydate'], function () {
+        /*var kw = "";
+        addData(kw);*/
 
-    $("#searchTab").on('click', function(event){
-        var tableName = $("#tableName").val();
-        var createTime = $("#createTime").val();
-        addData(tableName, createTime);
-    });
-
-    function addData(tableName, createTime) {
         var table = layui.table;
-        table.render({
-            elem: '#test'
+        tabInit = table.render({
+            elem: '#tables'
             , method: 'post'
             , request: {
                 pageName: 'pageNum' //页码的参数名称，默认：page
                 , limitName: 'pageSize' //每页数据量的参数名，默认：limit
             }
-            , url: ctx + 'back/tool/gen/list?tableName='+tableName
+            , url: ctx + 'back/tool/gen/list'
             , contentType: 'application/json'
             , toolbar: '#toolbarDemo'
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
@@ -97,6 +85,39 @@
 
             ]]
             , page: true
+        });
+        //日期插件
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: "#createTime"
+        });
+        var form = layui.form ,layer = layui.layer;
+        //监听搜索框
+        form.on('submit(searchSubmit)', function(data){
+            //重新加载table
+            load(data);
+            return false;
+        });
+
+        //监听工具条
+        table.on('tool(tables)', function(obj){
+            var data = obj.data;
+            console.log(data);
+            if(obj.event === 'genCode'){
+                window.location.href = ctx + 'back/tool/gen/genCode/'+data.tableName;
+            } else if(obj.event === 'edit'){
+                layer.alert('编辑行：<br>'+ JSON.stringify(data))
+            }
+        });
+    });
+
+    //重新加载table
+    function load(obj){
+        tabInit.reload({
+            where: obj.field
+            , page: {
+                curr: 1 //从当前页码开始
+            }
         });
     }
 </script>

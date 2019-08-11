@@ -88,16 +88,16 @@ public class GenUtils {
      */
     public static List<String> getTemplates() {
         List<String> templates = new ArrayList<String>();
-        templates.add("vm/java/domain.java.vm");
-        templates.add("vm/java/Mapper.java.vm");
-        templates.add("vm/java/Service.java.vm");
-        templates.add("vm/java/ServiceImpl.java.vm");
-        templates.add("vm/java/Controller.java.vm");
-        templates.add("vm/xml/Mapper.xml.vm");
-        templates.add("vm/html/list.html.vm");
-        templates.add("vm/html/add.html.vm");
-        templates.add("vm/html/edit.html.vm");
-        templates.add("vm/sql/sql.vm");
+        templates.add("templates/vm/java/domain.java.vm");
+        templates.add("templates/vm/java/Mapper.java.vm");
+        templates.add("templates/vm/java/Service.java.vm");
+        templates.add("templates/vm/java/ServiceImpl.java.vm");
+        templates.add("templates/vm/java/Controller.java.vm");
+        templates.add("templates/vm/xml/Mapper.xml.vm");
+        /*templates.add("templates/vm/html/list.html.vm");
+        templates.add("templates/vm/html/add.html.vm");
+        templates.add("templates/vm/html/edit.html.vm");*/
+        templates.add("templates/vm/sql/sql.vm");
         return templates;
     }
 
@@ -149,7 +149,7 @@ public class GenUtils {
             return mybatisPath + "Mapper.xml";
         }
 
-        if (template.contains("list.html.vm")) {
+        /*if (template.contains("list.html.vm")) {
             return htmlPath + "/" + classname + ".html";
         }
         if (template.contains("add.html.vm")) {
@@ -157,7 +157,7 @@ public class GenUtils {
         }
         if (template.contains("edit.html.vm")) {
             return htmlPath + "/" + "edit.html";
-        }
+        }*/
         if (template.contains("sql.vm")) {
             return classname + "Menu.sql";
         }
