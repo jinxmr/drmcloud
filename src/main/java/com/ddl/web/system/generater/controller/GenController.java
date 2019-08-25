@@ -35,11 +35,10 @@ public class GenController extends BaseController {
     }
 
     @RequiresPermissions("tool:gen:list")
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
-    public TableDataInfo list(TableInfo tableInfo,@RequestParam(required=false,defaultValue="1")Integer pageNum,
-                              @RequestParam(required=false,defaultValue="10")Integer pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+    public TableDataInfo list(TableDataInfo<TableInfo> res, TableInfo tableInfo) {
+        PageHelper.startPage(res.getPage(), res.getLimit());
         List<TableInfo> list = genService.selectTableList(tableInfo);
         TableDataInfo dataTable = getDataTable(list);
         return dataTable;
@@ -53,6 +52,24 @@ public class GenController extends BaseController {
     public void genCode(HttpServletResponse response, @PathVariable("tableName") String tableName) throws IOException {
         byte[] data = genService.generatorCode(tableName);
         genCode(response, data);
+    }
+
+    /**
+     * 批量生成代码
+     */
+    @RequiresPermissions("tool:gen:code")
+    @GetMapping("/batchGenCode")
+    @ResponseBody
+    public void batchGenCode(HttpServletResponse response, String tables) throws IOException
+    {
+        String[] tableNames = tables.split(",");
+        byte[] data = genService.generatorCode(tableNames);
+        response.reset();
+        response.setHeader("Content-Disposition", "attachment; filename=\"school.zip\"");
+        response.addHeader("Content-Length", "" + data.length);
+        response.setContentType("application/octet-stream; charset=UTF-8");
+
+        IOUtils.write(data, response.getOutputStream());
     }
 
     /**
