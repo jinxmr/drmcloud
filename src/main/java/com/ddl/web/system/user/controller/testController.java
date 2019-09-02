@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping("back")
+@RequestMapping("back1")
 public class testController {
 
     @Autowired
     private IUserService userService;
 
-    @GetMapping("sysUser")
+    @GetMapping("sysUser1")
     @RequiresPermissions("sys:user:view")
     @ResponseBody
     public String test() {

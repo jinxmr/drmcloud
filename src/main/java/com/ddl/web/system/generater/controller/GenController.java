@@ -65,7 +65,7 @@ public class GenController extends BaseController {
         String[] tableNames = tables.split(",");
         byte[] data = genService.generatorCode(tableNames);
         response.reset();
-        response.setHeader("Content-Disposition", "attachment; filename=\"school.zip\"");
+        response.setHeader("Content-Disposition", "attachment; filename=\"drm.zip\"");
         response.addHeader("Content-Length", "" + data.length);
         response.setContentType("application/octet-stream; charset=UTF-8");
 

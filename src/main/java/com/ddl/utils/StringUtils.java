@@ -1,5 +1,8 @@
 package com.ddl.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
     /**
@@ -30,5 +33,19 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             result.append(camel.substring(1).toLowerCase());
         }
         return result.toString();
+    }
+
+    /**
+     * 将String类型的数组转换为Integer类型的List
+     * @param arr
+     * @return
+     */
+    public static List<Integer> arrToList(String[] arr) {
+
+        List<Integer> list = new ArrayList<>();
+        for(String str : arr) {
+            list.add(Integer.valueOf(str));
+        }
+        return list;
     }
 }

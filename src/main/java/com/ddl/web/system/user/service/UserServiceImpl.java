@@ -1,7 +1,9 @@
 package com.ddl.web.system.user.service;
 
+import com.ddl.utils.StringUtils;
 import com.ddl.web.enums.UserDictEnums;
 import com.ddl.web.system.user.domain.SysUser;
+import com.ddl.web.system.user.domain.SysUserCriteria;
 import com.ddl.web.system.user.mapper.SysUserMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -13,9 +15,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -70,5 +73,66 @@ public class UserServiceImpl implements IUserService {
     public String encryptPassword(String username, String password, String salt) {
         return new SimpleHash("md5", password,
                 ByteSource.Util.bytes(salt), 2).toHex();
+    }
+
+    /**
+     * 分页查询列表
+     *
+     * @param user 用户信息
+     * @return
+     */
+    @Override
+    public List<SysUser> selectUserList(SysUser user) {
+        SysUserCriteria userCriteria = new SysUserCriteria();
+        SysUserCriteria.Criteria query = userCriteria.createCriteria();
+        if (StringUtils.isNotEmpty(user.getLoginName())) {
+            query.andLoginNameLike("%" + user.getLoginName() + "%");
+        }
+        if (StringUtils.isNotEmpty(user.getUserName())) {
+            query.andUserNameLike("%" + user.getUserName() + "%");
+        }
+        List<SysUser> sysUsers = userMapper.selectByExample(userCriteria);
+        return sysUsers;
+    }
+
+    /**
+     * 用户插入
+     *
+     * @param user 用户信息
+     * @return
+     */
+    @Override
+    public int insertUser(SysUser user) {
+        int res = userMapper.insert(user);
+        return res;
+    }
+
+    /**
+     * 用户修改
+     *
+     * @param user 用户信息
+     * @return
+     */
+    @Override
+    public int updateUser(SysUser user) {
+        int res = userMapper.updateByPrimaryKeySelective(user);
+        return res;
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param ids 需要删除的数据ID
+     * @return
+     */
+    @Override
+    public int deleteUserByIds(String ids) {
+        SysUserCriteria userCriteria = new SysUserCriteria();
+        SysUserCriteria.Criteria query = userCriteria.createCriteria();
+        String[] idArr = ids.split(",");
+        List<Integer> idList = StringUtils.arrToList(idArr);
+        query.andIdIn(idList);
+        int res = userMapper.deleteByExample(userCriteria);
+        return res;
     }
 }

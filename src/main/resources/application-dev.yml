@@ -3,7 +3,7 @@ server:
 spring:
   datasource:
     db1:
-      url: jdbc:mysql://47.94.194.140:3306/my_data?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
+      url: jdbc:mysql://localhost:3306/my_data?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT
       username: root
       password: root
       type: com.alibaba.druid.pool.DruidDataSource

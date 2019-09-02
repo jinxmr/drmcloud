@@ -3,6 +3,8 @@ package com.ddl.web.system.user.service;
 
 import com.ddl.web.system.user.domain.SysUser;
 
+import java.util.List;
+
 /**
  * 用户 业务层
  * 
@@ -21,4 +23,36 @@ public interface IUserService {
      * 登录
      */
     public SysUser login(String username, String password);
+
+    /**
+     * 查询用户列表
+     *
+     * @param user 用户信息
+     * @return 用户集合
+     */
+    public List<SysUser> selectUserList(SysUser user);
+
+    /**
+     * 新增用户
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    public int insertUser(SysUser user);
+
+    /**
+     * 修改用户
+     *
+     * @param user 用户信息
+     * @return 结果
+     */
+    public int updateUser(SysUser user);
+
+    /**
+     * 删除用户信息
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    public int deleteUserByIds(String ids);
 }

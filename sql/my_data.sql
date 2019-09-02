@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : my-1
+ Source Server         : localhost
  Source Server Type    : MySQL
  Source Server Version : 50644
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 11/08/2019 20:12:56
+ Date: 02/09/2019 23:02:08
 */
 
 SET NAMES utf8mb4;
@@ -59,7 +59,7 @@ CREATE TABLE `sys_menu`  (
   `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
   `app_id` int(11) NULL DEFAULT NULL COMMENT '关联APPID',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单表' ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_menu
@@ -79,6 +79,10 @@ INSERT INTO `sys_menu` VALUES (12, '查看', 4, 1, NULL, 'F', 0, 'sys:role:list'
 INSERT INTO `sys_menu` VALUES (13, '新增', 4, 2, NULL, 'F', 0, 'sys:role:add', NULL, 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:32', '', 1);
 INSERT INTO `sys_menu` VALUES (14, '编辑', 4, 3, NULL, 'F', 0, 'sys:role:edit', NULL, 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:32', '', 1);
 INSERT INTO `sys_menu` VALUES (15, '删除', 4, 4, NULL, 'F', 0, 'sys:role:remove', NULL, 'fa fa-gear', 'admin\r\n\r\n\r\n\r\n\r\n\r\n', '2019-07-19 10:33:32', '', 1);
+INSERT INTO `sys_menu` VALUES (16, '新增', 3, 2, NULL, 'F', 0, 'sys:user:add', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:32', '', 1);
+INSERT INTO `sys_menu` VALUES (17, '编辑', 3, 3, NULL, 'F', 0, 'sys:user:edit', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:32', '', 1);
+INSERT INTO `sys_menu` VALUES (18, '删除', 3, 4, NULL, 'F', 0, 'sys:user:remove', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:32', '', 1);
+INSERT INTO `sys_menu` VALUES (19, '重置密码', 3, 5, NULL, 'F', 0, 'sys:user:reset', NULL, 'fa fa-gear', 'admin', '2019-07-19 10:33:32', '', 1);
 
 -- ----------------------------
 -- Table structure for sys_role
