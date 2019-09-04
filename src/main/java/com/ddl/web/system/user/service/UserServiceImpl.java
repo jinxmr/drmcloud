@@ -1,5 +1,6 @@
 package com.ddl.web.system.user.service;
 
+import com.ddl.utils.PasswordEncryptionUtil;
 import com.ddl.utils.StringUtils;
 import com.ddl.web.enums.UserDictEnums;
 import com.ddl.web.system.user.domain.SysUser;
@@ -67,13 +68,9 @@ public class UserServiceImpl implements IUserService {
     }
 
     public boolean matches(SysUser user, String newPassword) {
-        return user.getPassword().equals(encryptPassword(user.getLoginName(), newPassword, user.getLoginName()));
+        return user.getPassword().equals(PasswordEncryptionUtil.encryptPassword(user.getLoginName(), newPassword, user.getLoginName()));
     }
 
-    public String encryptPassword(String username, String password, String salt) {
-        return new SimpleHash("md5", password,
-                ByteSource.Util.bytes(salt), 2).toHex();
-    }
 
     /**
      * 分页查询列表

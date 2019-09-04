@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -23,10 +25,10 @@ public class DrmApplicationTests {
 	private GenMapper genMapper;
 	@Test
 	public void contextLoads() {
-		PageHelper.startPage(0, 10);
-		TableInfo tableInfo = new TableInfo();
-		List<TableInfo> tableInfoList = genMapper.selectTableList(tableInfo);
-		System.out.println(tableInfoList.size());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date date = new Date();
+		String format = sdf.format(date);
+		System.out.println(format);
 	}
 
 }

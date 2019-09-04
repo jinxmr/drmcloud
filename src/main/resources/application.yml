@@ -16,6 +16,7 @@ spring:
 logging:
   level:
     com.ddl.web.system.generater.mapper: debug
+    com.ddl.web.system.user.mapper: debug
   file:
     max-size: 50M
 
@@ -31,10 +32,5 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
-#mybatis:
-#  # 指定搜索包别名
-#  typeAliasesPackage: com.ddl
-#  # 配置mapper的扫描 找到所有的mapper映射文件
-#  mapperLocations: classpath*:mapper/**/*.xml
-#  # 加载全局的配置文件
-#  configLocation: classpath:mybatis/mybatis-config.xml
+initialize:
+  password: c6ac59a147fa349f1032c521b7e521a3

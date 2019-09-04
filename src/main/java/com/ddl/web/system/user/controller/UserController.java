@@ -6,11 +6,13 @@ import com.ddl.model.AjaxResult;
 import com.ddl.model.TableDataInfo;
 import com.ddl.web.enums.BusinessType;
 import com.ddl.web.system.controller.BaseController;
+import com.ddl.web.system.generater.domain.TableInfo;
 import com.ddl.web.system.user.domain.SysUser;
 import com.ddl.web.system.user.service.IUserService;
 import com.github.pagehelper.PageHelper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +30,9 @@ public class UserController extends BaseController {
     @Autowired
     private IUserService userService;
 
+    @Value("${initialize.password}")
+    private String initPassword;
+
     @RequiresPermissions("system:user:view" )
     @GetMapping("")
     public String user() {
@@ -40,10 +45,9 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:list" )
     @GetMapping("/list" )
     @ResponseBody
-    public TableDataInfo list(SysUser user, @RequestParam(required=false,defaultValue="1")Integer pageNum,
-                              @RequestParam(required=false,defaultValue="10")Integer pageSize) {
+    public TableDataInfo list(SysUser user, TableDataInfo<TableInfo> param) {
 
-        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.startPage(param.getPage(), param.getLimit());
         List<SysUser> list = userService.selectUserList(user);
         TableDataInfo dataTable = getDataTable(list);
         return dataTable;
@@ -70,7 +74,7 @@ public class UserController extends BaseController {
     /**
      * 修改用户
      */
-    @GetMapping("/edit/{id}" )
+    @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id" ) Integer id, ModelMap mmap) {
         SysUser user =userService.selectUserById(id);
         mmap.put("user" , user);
@@ -95,6 +99,19 @@ public class UserController extends BaseController {
     @ResponseBody
     public AjaxResult remove(String ids) {
         return toAjax(userService.deleteUserByIds(ids));
+    }
+
+    /**
+     * 重置密码
+     * @param user
+     * @return
+     */
+    @RequiresPermissions("system:user:reset" )
+    @PostMapping("/reset" )
+    @ResponseBody
+    public AjaxResult pwdReset(SysUser user) {
+        user.setPassword(initPassword); //赋初始化密码
+        return toAjax(userService.updateUser(user));
     }
 
 }
