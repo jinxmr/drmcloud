@@ -17,7 +17,10 @@
                 <div class="layui-card-header">用户列表</div>
                 <div class="layui-card-body">
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn" data-type="genCheckCode">删除</button>
+                        <button class="layui-btn layui-btn-danger" data-type="removes">删除</button>
+                    </div>
+                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-blue" data-type="add">新增</button>
                     </div>
                     <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
                           style="margin-top: 20px;">
@@ -149,22 +152,29 @@
         });
 
         var $ = layui.$, active = {
-            genCheckCode: function () { //获取选中数据
-                var checkStatus = table.checkStatus('tbReload')
+            removes: function () { //获取选中数据
+                let checkStatus = table.checkStatus('tbReload')
                     , data = checkStatus.data;
                 if (data.length == 0) {
                     layer.msg(`请选择操作数据`);
                     return;
                 }
-                console.log(data);
-                var tableNames = "";
-                for (var i in data) {
-                    tableNames += data[i].tableName + ",";
+                let ids = "";
+                for (let i in data) {
+                    ids += data[i].id + ",";
                 }
-                location.href = ctx + "back/tool/gen/batchGenCode?tables=" + tableNames.substring(0, tableNames.lastIndexOf(','));
+                $.post(ctx + "back/sysUser/remove", {ids: ids}, function (data) {
+                    layer.msg(data.msg);
+                    if (data.code == 0) {
+                        table.reload('tbReload');
+                    }
+                })
+            },
+            add: function () { //新增
+                location.href = ctx + "back/sysUser/add";
             },
             reload: function () {
-                var tableName = $('#tableName').val();
+                let tableName = $('#tableName').val();
                 //执行重载
                 table.reload('tbReload', {
                     where: {

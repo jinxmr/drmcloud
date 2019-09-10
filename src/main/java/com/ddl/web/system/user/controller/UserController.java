@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ddl.model.AjaxResult;
 import com.ddl.model.TableDataInfo;
+import com.ddl.utils.PasswordEncryptionUtil;
 import com.ddl.web.enums.BusinessType;
 import com.ddl.web.system.controller.BaseController;
 import com.ddl.web.system.generater.domain.TableInfo;
@@ -68,7 +69,13 @@ public class UserController extends BaseController {
     @PostMapping("/add" )
     @ResponseBody
     public AjaxResult addSave(SysUser user) {
-        return toAjax(userService.insertUser(user));
+        int res = 0;
+        try {
+            res = userService.insertUser(user);
+        } catch (RuntimeException r) {
+            return AjaxResult.error(r.getMessage());
+        }
+        return toAjax(res);
     }
 
     /**
@@ -88,7 +95,13 @@ public class UserController extends BaseController {
     @PostMapping("/edit" )
     @ResponseBody
     public AjaxResult editSave(SysUser user) {
-        return toAjax(userService.updateUser(user));
+        int res = 0;
+        try {
+            res = userService.updateUser(user);
+        } catch (RuntimeException r) {
+            return AjaxResult.error(r.getMessage());
+        }
+        return toAjax(res);
     }
 
     /**
@@ -110,7 +123,9 @@ public class UserController extends BaseController {
     @PostMapping("/reset" )
     @ResponseBody
     public AjaxResult pwdReset(SysUser user) {
-        user.setPassword(initPassword); //赋初始化密码
+        SysUser sysUser = userService.selectUserById(user.getId());
+        String pwd = PasswordEncryptionUtil.encryptPassword(initPassword, sysUser.getLoginName());
+        user.setPassword(pwd); //赋初始化密码
         return toAjax(userService.updateUser(user));
     }
 

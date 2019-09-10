@@ -15,6 +15,7 @@ spring:
 # 日志配置
 logging:
   level:
+    org.springframework.web: DEBUG
     com.ddl.web.system.generater.mapper: debug
     com.ddl.web.system.user.mapper: debug
   file:
@@ -33,4 +34,4 @@ pagehelper:
   params: count=countSql
 
 initialize:
-  password: c6ac59a147fa349f1032c521b7e521a3
+  password: 123456

@@ -9,18 +9,11 @@ import com.ddl.web.system.user.mapper.SysUserMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.crypto.hash.Md5Hash;
-import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.util.ByteSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 用户 业务层处理
@@ -32,6 +25,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Value("${initialize.password}")
+    private String initPassword;
 
     /**
      * 通过用户ID查询用户
@@ -68,7 +64,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     public boolean matches(SysUser user, String newPassword) {
-        return user.getPassword().equals(PasswordEncryptionUtil.encryptPassword(user.getLoginName(), newPassword, user.getLoginName()));
+        return user.getPassword().equals(PasswordEncryptionUtil.encryptPassword(newPassword, user.getLoginName()));
     }
 
 
@@ -82,6 +78,7 @@ public class UserServiceImpl implements IUserService {
     public List<SysUser> selectUserList(SysUser user) {
         SysUserCriteria userCriteria = new SysUserCriteria();
         SysUserCriteria.Criteria query = userCriteria.createCriteria();
+        userCriteria.setOrderByClause("ID DESC");
         if (StringUtils.isNotEmpty(user.getLoginName())) {
             query.andLoginNameLike("%" + user.getLoginName() + "%");
         }
@@ -100,8 +97,56 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public int insertUser(SysUser user) {
+        verify(user);
+        user.setCreateDate(new Date()); //创建时间
+        user.setDelFlag(UserDictEnums.OK.getCode());    //是否删除
+        user.setPassword(PasswordEncryptionUtil.encryptPassword(initPassword, user.getLoginName()));
         int res = userMapper.insert(user);
         return res;
+    }
+
+    /**
+     * 验证登录账号 手机号 邮箱是否有重复
+     * @param user
+     */
+    private void verify(SysUser user) {
+        Integer id = user.getId();
+
+        //登录账号校验
+        SysUserCriteria criteria = new SysUserCriteria();
+        SysUserCriteria.Criteria query = criteria.createCriteria();
+        query.andLoginNameEqualTo(user.getLoginName());
+        if(null != id) {    //修改校验
+            query.andIdNotEqualTo(id);
+        }
+        List<SysUser> users = userMapper.selectByExample(criteria);
+        if (null != users && users.size() > 0) {
+            throw new RuntimeException("登录账号重复");
+        }
+
+        //手机号校验
+        criteria = new SysUserCriteria();
+        query = criteria.createCriteria();
+        query.andMobileEqualTo(user.getMobile());
+        if(null != id) {    //修改校验
+            query.andIdNotEqualTo(id);
+        }
+        List<SysUser> users_1 = userMapper.selectByExample(criteria);
+        if (null != users_1 && users_1.size() > 0) {
+            throw new RuntimeException("手机号已被注册");
+        }
+
+        //Email校验
+        criteria = new SysUserCriteria();
+        query = criteria.createCriteria();
+        query.andEmailEqualTo(user.getEmail());
+        if(null != id) {    //修改校验
+            query.andIdNotEqualTo(id);
+        }
+        List<SysUser> users_2 = userMapper.selectByExample(criteria);
+        if (null != users_2 && users_2.size() > 0) {
+            throw new RuntimeException("邮箱已被注册");
+        }
     }
 
     /**
@@ -112,6 +157,8 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public int updateUser(SysUser user) {
+
+        verify(user);
         int res = userMapper.updateByPrimaryKeySelective(user);
         return res;
     }
