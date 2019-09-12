@@ -1,23 +1,28 @@
 package com.ddl.web.system.user.service;
 
 
+import com.ddl.utils.ShiroUtils;
 import com.ddl.utils.StringUtils;
-import com.ddl.web.system.user.domain.SysRole;
-import com.ddl.web.system.user.domain.SysRoleCriteria;
+import com.ddl.web.system.user.domain.*;
 import com.ddl.web.system.user.mapper.SysRoleMapper;
+import com.ddl.web.system.user.mapper.SysRoleMenuMapper;
+import com.ddl.web.system.user.mapper.SysUserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
 
     @Autowired
     private SysRoleMapper sysRoleMapper;
+
+    @Autowired
+    private SysRoleMenuMapper sysRoleMenuMapper;
+
+    @Autowired
+    private SysUserRoleMapper sysUserRoleMapper;
 
     /**
      * 根据用户ID查询权限
@@ -71,8 +76,33 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public int insertRole(SysRole role) {
+        verify(role);
+        SysUser user = ShiroUtils.getSysUser();
+        role.setCreateBy(user.getUserName());
+        role.setCreateTime(new Date());
         int res = sysRoleMapper.insertSelective(role);
         return res;
+    }
+
+    private void verify(SysRole role) {
+        //查询角色名称 权限标识是否重复
+        SysRoleCriteria roleCriteria = new SysRoleCriteria();
+        SysRoleCriteria.Criteria query = roleCriteria.createCriteria();
+        //现根据角色名称查询 重复则抛异常
+        query.andRoleNameEqualTo(role.getRoleName());
+        List<SysRole> roles_1 = sysRoleMapper.selectByExample(roleCriteria);
+        if(null != roles_1 && roles_1.size()>0) {
+            throw new RuntimeException("角色名称重复");
+        }
+
+        roleCriteria = new SysRoleCriteria();
+        query = roleCriteria.createCriteria();
+        //现根据角色名称查询 重复则抛异常
+        query.andRoleNameEqualTo(role.getRoleName());
+        List<SysRole> roles_2 = sysRoleMapper.selectByExample(roleCriteria);
+        if(null != roles_1 && roles_1.size()>0) {
+            throw new RuntimeException("权限标识重复重复");
+        }
     }
 
     /**
@@ -82,6 +112,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public int updateRole(SysRole role) {
+        verify(role);
         int res = sysRoleMapper.updateByPrimaryKeySelective(role);
         return res;
     }
@@ -99,6 +130,19 @@ public class SysRoleServiceImpl implements SysRoleService {
         List<Integer> idList = StringUtils.arrToList(idArr);
         query.andIdIn(idList);
         int res = sysRoleMapper.deleteByExample(roleCriteria);
+        if (res > 0) {
+            //删除roleMenu中间表数据
+            SysRoleMenuCriteria roleMenuCriteria = new SysRoleMenuCriteria();
+            SysRoleMenuCriteria.Criteria roleMenuQuery = roleMenuCriteria.createCriteria();
+            roleMenuQuery.andRoleIdIn(idList);
+            sysRoleMenuMapper.deleteByExample(roleMenuCriteria);
+
+            //删除userRole中间表数据
+            SysUserRoleCriteria userRoleCriteria = new SysUserRoleCriteria();
+            SysUserRoleCriteria.Criteria userRoleQuery = userRoleCriteria.createCriteria();
+            userRoleQuery.andRoleIdIn(idList);
+            sysUserRoleMapper.deleteByExample(userRoleCriteria);
+        }
         return res;
     }
 }

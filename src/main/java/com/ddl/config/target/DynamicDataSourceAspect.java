@@ -11,11 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class DynamicDataSourceAspect {
     @Before("@annotation(targetDataSource)")
-    public void beforeSwitchDS(JoinPoint point, TargetDataSource targetDataSource){
+    public void beforeSwitchDS(JoinPoint point, TargetDataSource targetDataSource) {
         DynamicDataSourceContextHolder.setDB(targetDataSource.value());
     }
+
     @After("@annotation(targetDataSource)")
-    public void afterSwitchDS(JoinPoint point,TargetDataSource targetDataSource){
+    public void afterSwitchDS(JoinPoint point, TargetDataSource targetDataSource) {
         DynamicDataSourceContextHolder.clearDB();
     }
 }

@@ -60,9 +60,9 @@
 
                     <label class="layui-form-label">状态</label>
                     <div class="layui-input-inline">
-                        <input type="checkbox" name="open" lay-skin="switch"
-                               lay-filter="component-form-switchTest" lay-text="启用|停用"
-                               th:checked="${user.status == 0 ? 'checked' : ''}"/>
+                        <input type="checkbox" name="status" lay-skin="switch"
+                               lay-filter="status" lay-text="启用|停用"
+                               th:attr="checked=${user.status == 0 ? true : false}"/>
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -109,13 +109,14 @@
             elem: '#LAY-component-form-group-date'
         });
 
-        /* 监听指定开关 */
-        form.on('switch(component-form-switchTest)', function (data) {
-
-        });
 
         /* 监听提交 */
         form.on('submit(component-form-demo1)', function (data) {
+            if(data.field.status == "on") {
+                data.field.status = "0";
+            } else {
+                data.field.status = "1";
+            }
             $.ajax({
                 url: ctx + "back/sysUser/edit",
                 async: false,

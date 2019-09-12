@@ -43,9 +43,9 @@
         </javaClientGenerator>
 
         <!-- 区域 -->
-        <table tableName="sys_role" domainObjectName="SysRole">
+        <table tableName="sys_user_role" domainObjectName="SysUserRole">
         </table>
-        <table tableName="sys_menu" domainObjectName="SysMenu">
+        <table tableName="sys_role_menu" domainObjectName="SysRoleMenu">
         </table>
     </context>
 </generatorConfiguration>			

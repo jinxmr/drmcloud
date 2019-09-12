@@ -14,24 +14,20 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <div class="layui-card-header">用户列表</div>
+                <div class="layui-card-header">角色列表</div>
                 <div class="layui-card-body">
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="tool:user:remove" data-type="removes">删除</button>
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="tool:role:remove" data-type="removes">删除</button>
                     </div>
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="tool:user:add" data-type="add">新增</button>
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="tool:role:add" data-type="add">新增</button>
                     </div>
                     <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
                           style="margin-top: 20px;">
                         <div class="test-table-reload-btn" style="margin-bottom: 10px;">
-                            登录账号：
+                            角色名称：
                             <div class="layui-inline">
-                                <input class="layui-input" name="loginName" id="loginName" autocomplete="off">
-                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
-                            用户姓名：
-                            <div class="layui-inline">
-                                <input class="layui-input" name="userName" id="userName" autocomplete="off">
+                                <input class="layui-input" name="roleName" id="roleName" autocomplete="off">
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;
                             <button class="layui-btn" type="button"
                                     data-type="reload">搜索
@@ -48,7 +44,6 @@
 <script type="text/html" id="row_opt">
     <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="tool:user:edit">查看</a>
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="tool:user:remove">删除</a>
-    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pwdReset" shiro:hasPermission="tool:user:reset">密码重置</a>
 </script>
 <script type="text/html" id="switchTpl">
     <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{
@@ -65,49 +60,34 @@
     }).extend({
         index: 'lib/index' //主入口模块
     }).use(['form', 'index', 'table', 'laydate'], function () {
-        /*var kw = "";
-        addData(kw);*/
 
         var table = layui.table;
         table.render({
             elem: '#tables'
             , id: 'tbReload'
             , method: 'GET'
-            , url: ctx + 'back/sysUser/list'
+            , url: ctx + 'back/sysRole/list'
             , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             , title: '用户数据表'
             , fitColumns: true
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                , {field: 'loginName', title: '登录账号', sort: true}
-                , {field: 'userName', title: '用户姓名'}
-                , {
-                    field: 'sex',
-                    title: '性别',
-                    sort: true,
-                    templet: function (e) {
-                        switch (e.status) {
-                            case 0:
-                                return "男";
-                            case 1:
-                                return "女";
-                            default:
-                                return "未知";
-                        }
-
-                    }
-
-                }
-                , {field: 'email', title: '邮箱', sort: true}
-                , {field: 'mobile', title: '手机号'}
-                , {field: 'loginIp', title: '最后登录IP'}
-                , {field: 'loginDate', title: '最后登录时间'}
+                , {field: 'roleName', title: '角色名称', sort: true}
                 , {
                     field: 'status',
-                    title: '状态',
-                    sort: true,
-                    templet: '#switchTpl',
+                    title: '角色状态',
+                    templet: function(e) {
+                        let status = e.status;
+                        if(status == 0) {
+                            return "正常";
+                        } else if(status == 1) {
+                            return "停用";
+                        } else {
+                            return "未知";
+                        }
+                    }
                 }
+                , {field: 'createTime', title: '创建时间', sort: true}
                 , {fixed: 'right', title: '操作', toolbar: '#row_opt', width: 200}
 
             ]]
@@ -129,21 +109,14 @@
             let data = obj.data;
             let data_id = data.id;
             if (obj.event === 'edit') {  //修改
-                window.location.href = ctx + 'back/sysUser/edit/' + data_id;
+                window.location.href = ctx + 'back/sysRole/edit/' + data_id;
             } else if (obj.event === 'remove') {    //删除
-                layer.confirm('确定要删除该用户吗?', function (index) {
-                    $.post(ctx + "back/sysUser/remove", {ids: data_id}, function (data) {
+                layer.confirm('确定要删除该角色吗?', function (index) {
+                    $.post(ctx + "back/sysRole/remove", {ids: data_id}, function (data) {
                         layer.msg(data.msg);
                         if (data.code == 0) {
                             table.reload("tbReload");
                         }
-                    });
-                    layer.close(index);
-                });
-            } else if (obj.event === 'pwdReset') {   //密码重置
-                layer.confirm('确定要重置该用户的密码吗?', function (index) {
-                    $.post(ctx + "back/sysUser/reset", {id: data_id}, function (data) {
-                        layer.msg(data.msg);
                     });
                     layer.close(index);
                 });
@@ -163,7 +136,7 @@
                 for (let i in data) {
                     ids += data[i].id + ",";
                 }
-                $.post(ctx + "back/sysUser/remove", {ids: ids}, function (data) {
+                $.post(ctx + "back/sysRole/remove", {ids: ids}, function (data) {
                     layer.msg(data.msg);
                     if (data.code == 0) {
                         table.reload('tbReload');
@@ -171,16 +144,14 @@
                 })
             },
             add: function () { //新增
-                location.href = ctx + "back/sysUser/add";
+                location.href = ctx + "back/sysRole/add";
             },
             reload: function () {
-                let loginName = $('#loginName').val();
-                let userName = $('#userName').val();
+                let roleName = $('#roleName').val();
                 //执行重载
                 table.reload('tbReload', {
                     where: {
-                        loginName: loginName,
-                        userName: userName
+                        roleName: roleName
                     }
                 });
             }

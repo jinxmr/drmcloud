@@ -22,9 +22,8 @@ import org.springframework.web.bind.annotation.*;
  * @date 2019-09-02
  */
 @Controller
-@RequestMapping("/system/role" )
+@RequestMapping("back/sysRole" )
 public class RoleController extends BaseController {
-    private String prefix = "system/role" ;
 
     @Autowired
     private SysRoleService roleService;
@@ -32,14 +31,14 @@ public class RoleController extends BaseController {
     @RequiresPermissions("system:role:view" )
     @GetMapping()
     public String role() {
-        return prefix + "/role" ;
+        return "system/role/role" ;
     }
 
     /**
      * 查询角色列表
      */
     @RequiresPermissions("system:role:list" )
-    @PostMapping("/list" )
+    @GetMapping("/list" )
     @ResponseBody
     public TableDataInfo list(SysRole role, @RequestParam(required=false,defaultValue="1")Integer pageNum,
                               @RequestParam(required=false,defaultValue="10")Integer pageSize) {
@@ -55,7 +54,7 @@ public class RoleController extends BaseController {
      */
     @GetMapping("/add" )
     public String add() {
-        return prefix + "/add" ;
+        return "system/role/add" ;
     }
 
     /**
@@ -65,7 +64,13 @@ public class RoleController extends BaseController {
     @PostMapping("/add" )
     @ResponseBody
     public AjaxResult addSave(SysRole role) {
-        return toAjax(roleService.insertRole(role));
+        int res = 0;
+        try {
+            res = roleService.insertRole(role);
+        } catch (RuntimeException r) {
+            return AjaxResult.error(r.getMessage());
+        }
+        return toAjax(res);
     }
 
     /**
@@ -75,7 +80,7 @@ public class RoleController extends BaseController {
     public String edit(@PathVariable("id" ) Integer id, ModelMap mmap) {
         SysRole role =roleService.selectRoleById(id);
         mmap.put("role" , role);
-        return prefix + "/edit" ;
+        return "system/role/edit" ;
     }
 
     /**
@@ -85,7 +90,13 @@ public class RoleController extends BaseController {
     @PostMapping("/edit" )
     @ResponseBody
     public AjaxResult editSave(SysRole role) {
-        return toAjax(roleService.updateRole(role));
+        int res = 0;
+        try {
+            res = roleService.updateRole(role);
+        } catch (RuntimeException r) {
+            return AjaxResult.error(r.getMessage());
+        }
+        return toAjax(res);
     }
 
     /**

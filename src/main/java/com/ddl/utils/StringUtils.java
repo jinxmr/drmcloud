@@ -48,4 +48,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return list;
     }
+
+    public static boolean isNotNull(Object o) {
+        return o != null;
+    }
 }

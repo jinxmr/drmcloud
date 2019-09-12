@@ -13,61 +13,51 @@
 
 <div class="layui-fluid">
     <div class="layui-card">
-        <div class="layui-card-header">用户新增</div>
+        <div class="layui-card-header">角色详情</div>
         <div class="layui-card-body" style="padding: 15px;">
-            <form class="layui-form" action="" lay-filter="component-form-group">
+            <form class="layui-form" action="" lay-filter="component-form-group" th:object="${role}">
+                <input name="roleId" type="hidden" th:field="*{id}"/>
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <label class="layui-form-label">登录名称</label>
+                        <label class="layui-form-label">角色名称</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="loginName" lay-verify="loginName" placeholder="请输入"
+                            <input type="text" name="roleName" readonly lay-verify="required" placeholder="请输入"
                                    autocomplete="off"
-                                   class="layui-input"/>
+                                   class="layui-input" th:field="*{roleName}"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">用户姓名</label>
+                        <label class="layui-form-label">权限标识</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="userName" lay-verify="required" placeholder="请输入"
+                            <input type="text" name="roleKey" lay-verify="required" placeholder="请输入"
                                    autocomplete="off"
-                                   class="layui-input"/>
+                                   class="layui-input" th:field="*{roleKey}"/>
                         </div>
                     </div>
                     <div class="layui-inline">
-                        <label class="layui-form-label">手机号</label>
+                        <label class="layui-form-label">显示顺序</label>
                         <div class="layui-input-inline">
-                            <input type="tel" name="mobile" lay-verify="required|phone" autocomplete="off"
-                                   class="layui-input"/>
+                            <input type="text" name="roleSort" lay-verify="required" autocomplete="off"
+                                   placeholder="请输入"
+                                   class="layui-input" th:field="*{roleSort}"/>
                         </div>
                     </div>
+
                     <div class="layui-inline">
-                        <label class="layui-form-label">邮箱地址</label>
+                        <label class="layui-form-label">角色状态</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="email" lay-verify="email" autocomplete="off" class="layui-input"
-                                   />
+                            <input type="checkbox" name="open" lay-skin="switch"
+                                   lay-filter="component-form-switchTest" lay-text="启用|停用"
+                                   th:checked="${role.status == 0 ? 'checked' : ''}"/>
                         </div>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
-
-                    <label class="layui-form-label">性别</label>
-                    <div class="layui-input-inline">
-                        <input type="radio" name="sex" title="男" value="0" checked/>
-                        <input type="radio" name="sex" title="女" value="1"/>
-                    </div>
-
-                    <label class="layui-form-label">状态</label>
-                    <div class="layui-input-inline">
-                        <input id="status" type="checkbox" checked name="status" lay-skin="switch"
-                               lay-filter="status" lay-text="启用|停用"
-                               />
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
-                        <textarea name="remarks" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="text" placeholder="请输入内容" class="layui-textarea"
+                                  th:field="*{remark}"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item layui-layout-admin">
@@ -107,23 +97,15 @@
             elem: '#LAY-component-form-group-date'
         });
 
-        //自定义验证规则
-        form.verify({
-            loginName: [
-                /^[\S]{5,12}$/
-                ,'登录账号必须在5-12位，且不能出现空格'
-            ]
+        /* 监听指定开关 */
+        form.on('switch(component-form-switchTest)', function (data) {
+
         });
 
         /* 监听提交 */
         form.on('submit(component-form-demo1)', function (data) {
-            if(data.field.status == "on") {
-                data.field.status = "0";
-            } else {
-                data.field.status = "1";
-            }
             $.ajax({
-                url: ctx + "back/sysUser/add",
+                url: ctx + "back/sysRole/edit",
                 async: false,
                 data: data.field,
                 type: "post",
@@ -132,7 +114,7 @@
                     if(data.code == 0) {
                         layer.msg(data.msg, {time: 1000, icon: 1}, function () {
 
-                            window.location.href = ctx + "back/sysUser";
+                            window.location.href = ctx + "back/sysRole";
                         });
                     } else {
                         layer.msg(data.msg, {icon: 2});

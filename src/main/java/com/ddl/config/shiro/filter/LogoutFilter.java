@@ -1,4 +1,4 @@
-package com.ddl.filter;
+package com.ddl.config.shiro.filter;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.cache.Cache;
@@ -15,7 +15,7 @@ import java.util.Deque;
 /**
  * 退出过滤器
  *
- * @author ruoyi
+ * @author drm
  */
 public class LogoutFilter extends org.apache.shiro.web.filter.authc.LogoutFilter {
     private static final Logger log = LoggerFactory.getLogger(LogoutFilter.class);

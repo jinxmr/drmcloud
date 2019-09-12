@@ -35,3 +35,7 @@ pagehelper:
 
 initialize:
   password: 123456
+
+shiro:
+  user:
+    loginUrl: back/login
