@@ -1,10 +1,10 @@
 package com.ddl.web.system.user.service;
 
+import com.ddl.model.ZTree;
 import com.ddl.utils.TreeUtils;
-import com.ddl.web.system.user.domain.SysMenu;
-import com.ddl.web.system.user.domain.SysMenuCriteria;
-import com.ddl.web.system.user.domain.SysUser;
+import com.ddl.web.system.user.domain.*;
 import com.ddl.web.system.user.mapper.SysMenuMapper;
+import com.ddl.web.system.user.mapper.SysRoleMenuMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,9 @@ public class SysMenuServiceImpl implements SysMenuService {
 
     @Autowired
     private SysMenuMapper sysMenuMapper;
+
+    @Autowired
+    private SysRoleMenuMapper sysRoleMenuMapper;
 
     /**
      * 根据用户ID查询权限
@@ -121,5 +124,30 @@ public class SysMenuServiceImpl implements SysMenuService {
         query.andIdIn(idList);
         int res = sysMenuMapper.deleteByExample(menuCriteria);
         return res;
+    }
+
+    /**
+     * 查询菜单树
+     *
+     * @return 菜单集合
+     */
+    @Override
+    public List<ZTree> selectMenuZTreeList(Integer roleId) {
+        List<SysMenu> menuList = sysMenuMapper.selectByRoleId(roleId);
+
+        //处理成zTree树
+        List<ZTree> zTreeList = new ArrayList<>();
+        ZTree zTree = null;
+        for(SysMenu menu : menuList) {
+            zTree = new ZTree();
+            zTree.setId(menu.getId());
+            zTree.setPId(menu.getParentId());
+            zTree.setName(menu.getMenuName());
+            if(null != menu.getRoleId()) {
+                zTree.setChecked(true);
+            }
+            zTreeList.add(zTree);
+        }
+        return zTreeList;
     }
 }

@@ -52,4 +52,9 @@ public interface SysMenuMapper {
      * @return 菜单列表
      */
     public List<SysMenu> selectMenusByUserId(Integer userId);
+
+    /**
+     * 根据角色ID关联查询菜单
+     */
+    public List<SysMenu> selectByRoleId(Integer roleId);
 }

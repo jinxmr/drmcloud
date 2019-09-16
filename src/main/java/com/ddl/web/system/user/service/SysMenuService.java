@@ -1,5 +1,6 @@
 package com.ddl.web.system.user.service;
 
+import com.ddl.model.ZTree;
 import com.ddl.web.system.user.domain.SysMenu;
 import com.ddl.web.system.user.domain.SysUser;
 
@@ -63,4 +64,11 @@ public interface SysMenuService {
      * @return 结果
      */
     public int deleteMenuByIds(String ids);
+
+    /**
+     * 查询菜单树
+     *
+     * @return 菜单集合
+     */
+    public List<ZTree> selectMenuZTreeList(Integer roleId);
 }

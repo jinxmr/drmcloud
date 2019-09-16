@@ -17,10 +17,10 @@
                 <div class="layui-card-header">用户列表</div>
                 <div class="layui-card-body">
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="tool:user:remove" data-type="removes">删除</button>
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="sys:user:remove" data-type="removes">删除</button>
                     </div>
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="tool:user:add" data-type="add">新增</button>
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="sys:user:add" data-type="add">新增</button>
                     </div>
                     <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
                           style="margin-top: 20px;">
@@ -46,9 +46,9 @@
     </div>
 </div>
 <script type="text/html" id="row_opt">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="tool:user:edit">查看</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="tool:user:remove">删除</a>
-    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pwdReset" shiro:hasPermission="tool:user:reset">密码重置</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="sys:user:edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="sys:user:remove">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pwdReset" shiro:hasPermission="sys:user:reset">密码重置</a>
 </script>
 <script type="text/html" id="switchTpl">
     <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{

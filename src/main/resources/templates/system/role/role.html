@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="../../../static/layuiadmin/style/admin.css"
           th:href="@{/layuiadmin/style/admin.css}"
           media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/demo.css"
+          th:href="@{/zTree_v3/css/demo.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/zTreeStyle/zTreeStyle.css"
+          th:href="@{/zTree_v3/css/zTreeStyle/zTreeStyle.css}"
+          media="all">
 </head>
 <body>
-
+<style>
+    a {
+        text-decoration:none;
+    }
+</style>
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
@@ -17,10 +27,13 @@
                 <div class="layui-card-header">角色列表</div>
                 <div class="layui-card-body">
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="tool:role:remove" data-type="removes">删除</button>
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="sys:role:remove"
+                                data-type="removes">删除
+                        </button>
                     </div>
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="tool:role:add" data-type="add">新增</button>
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="sys:role:add" data-type="add">新增
+                        </button>
                     </div>
                     <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
                           style="margin-top: 20px;">
@@ -42,8 +55,9 @@
     </div>
 </div>
 <script type="text/html" id="row_opt">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="tool:user:edit">查看</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="tool:user:remove">删除</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="sys:role:edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="sys:role:remove">删除</a>
+    <a class="layui-btn layui-btn-blue layui-btn-xs" lay-event="dist" shiro:hasPermission="sys:role:dist">分配权限</a>
 </script>
 <script type="text/html" id="switchTpl">
     <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{
@@ -51,6 +65,8 @@
 </script>
 <script src="../../../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}"></script>
 <script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.core.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.core.min.js}"></script>
 <script th:inline="javascript"> var ctx = [[@{
     /}]]; var captchaType = [[${captchaType}]];
 </script>
@@ -76,11 +92,11 @@
                 , {
                     field: 'status',
                     title: '角色状态',
-                    templet: function(e) {
+                    templet: function (e) {
                         let status = e.status;
-                        if(status == 0) {
+                        if (status == 0) {
                             return "正常";
-                        } else if(status == 1) {
+                        } else if (status == 1) {
                             return "停用";
                         } else {
                             return "未知";
@@ -120,6 +136,39 @@
                     });
                     layer.close(index);
                 });
+            } else if (obj.event === 'dist') {
+
+                var zNodes = [];
+                //加载权限树结构数据
+                $.ajaxSettings.async = false;
+                $.get(ctx + "system/menu/zTreeList", {roleId: data_id}, function (data) {
+                    var setting = {
+                        check: {
+                            enable: true
+                        },
+                        data: {
+                            simpleData: {
+                                enable: true,
+                                pIdKey: "pid"
+                            }
+                        }
+                    };
+                    //页面层
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim', //加上边框
+                        area: ['420px', '420px'], //宽高
+                        content: '<div style="margin: 0 auto;" class="zTreeDemoBackground left">' +
+                            '<ul id="treeDemo" style="height: 95%;" class="ztree"></ul>' +
+                            '</div>'
+                    });
+                    if(data.code == 0) {
+                        zNodes = data.data;
+                        console.log(zNodes);
+                        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+                    }
+                });
+                $.ajaxSettings.async = true;
             }
 
         });
@@ -166,6 +215,8 @@
             active[type] ? active[type].call(this) : '';
         });
     });
+
+
 </script>
 </body>
 </html>

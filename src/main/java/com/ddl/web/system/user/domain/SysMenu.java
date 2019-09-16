@@ -32,6 +32,8 @@ public class SysMenu implements Serializable {
 
     private Integer appId;
 
+    private Integer roleId;
+
     /** 子菜单 */
     private List<SysMenu> children = new ArrayList<SysMenu>();
 
@@ -147,5 +149,13 @@ public class SysMenu implements Serializable {
 
     public void setChildren(List<SysMenu> children) {
         this.children = children;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
     }
 }

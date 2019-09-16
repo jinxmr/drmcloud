@@ -1,60 +1,73 @@
 package com.ddl.poiTest;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.poi.xwpf.converter.core.BasicURIResolver;
+import org.apache.poi.xwpf.converter.core.FileImageExtractor;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLConverter;
+import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.util.ByteSource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.UUID;
 
 public class convertImgTest {
-
     public static void main(String[] args) throws IOException {
-
-        try {
-            Product a;
-            AbstractFactory af;
-            af = (AbstractFactory) ReadXML1.getObject();
-            a = af.newProduct();
-            a.show();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        /*Domain d1 = new Domain("c");
+        Domain d2 = new Domain("c");
+        Domain d3 = new Domain("b");
+        Domain d4 = new Domain("d");
+        System.out.println(d1.compareTo(d2));
+        System.out.println(d1.compareTo(d3));
+        System.out.println(d1.compareTo(d4));*/
+        Integer[] arr = {-1, 1, 2, -3, 4};
+        Arrays.sort(arr);
+        for(Integer str : arr) {
+            System.out.println(str);
         }
     }
 }
 
-//抽象产品：提供了产品的接口
-interface Product {
-    public void show();
-}
-
-//具体产品1：实现抽象产品中的抽象方法
-class ConcreteProduct1 implements Product {
-    public void show() {
-        System.out.println("具体产品1显示...");
+class DomainComparator implements Comparator<Domain>
+{
+    public int compare(Domain domain1, Domain domain2)
+    {
+        if (domain1.getStr().compareTo(domain2.getStr()) > 0)
+            return 1;
+        else if (domain1.getStr().compareTo(domain2.getStr()) == 0)
+            return 0;
+        else
+            return -1;
     }
 }
 
-//具体产品2：实现抽象产品中的抽象方法
-class ConcreteProduct2 implements Product {
-    public void show() {
-        System.out.println("具体产品2显示...");
+class Domain implements Comparable<Domain>
+{
+    private String str;
+
+    public Domain(String str)
+    {
+        this.str = str;
     }
-}
 
-//抽象工厂：提供了厂品的生成方法
-interface AbstractFactory {
-    public Product newProduct();
-}
-
-//具体工厂1：实现了厂品的生成方法
-class ConcreteFactory1 implements AbstractFactory {
-    public Product newProduct() {
-        System.out.println("具体工厂1生成-->具体产品1...");
-        return new ConcreteProduct1();
+    public int compareTo(Domain domain)
+    {
+        if (this.str.compareTo(domain.str) > 0)
+            return 1;
+        else if (this.str.compareTo(domain.str) == 0)
+            return 0;
+        else
+            return -1;
     }
-}
 
-//具体工厂2：实现了厂品的生成方法
-class ConcreteFactory2 implements AbstractFactory {
-    public Product newProduct() {
-        System.out.println("具体工厂2生成-->具体产品2...");
-        return new ConcreteProduct2();
+    public String getStr()
+    {
+        return str;
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ddl.model.AjaxResult;
 import com.ddl.model.TableDataInfo;
+import com.ddl.model.ZTree;
 import com.ddl.web.enums.BusinessType;
 import com.ddl.web.system.controller.BaseController;
 import com.ddl.web.system.user.domain.SysMenu;
@@ -98,4 +99,16 @@ public class MenuController extends BaseController {
         return toAjax(menuService.deleteMenuByIds(ids));
     }
 
+
+    /**
+     * 查询菜单树结构
+     * @return 返回zTree
+     */
+    @GetMapping("zTreeList")
+    @ResponseBody
+    public AjaxResult zTreeList(Integer roleId) {
+
+        List<ZTree> zTreeList = menuService.selectMenuZTreeList(roleId);
+        return AjaxResult.success("", zTreeList);
+    }
 }
