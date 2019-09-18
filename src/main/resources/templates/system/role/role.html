@@ -67,6 +67,8 @@
 <script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
 <script src="../../../static/zTree_v3/js/jquery.ztree.core.min.js"
         th:src="@{/zTree_v3/js/jquery.ztree.core.min.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.excheck.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.excheck.min.js}"></script>
 <script th:inline="javascript"> var ctx = [[@{
     /}]]; var captchaType = [[${captchaType}]];
 </script>
@@ -137,38 +139,16 @@
                     layer.close(index);
                 });
             } else if (obj.event === 'dist') {
-
-                var zNodes = [];
-                //加载权限树结构数据
-                $.ajaxSettings.async = false;
-                $.get(ctx + "system/menu/zTreeList", {roleId: data_id}, function (data) {
-                    var setting = {
-                        check: {
-                            enable: true
-                        },
-                        data: {
-                            simpleData: {
-                                enable: true,
-                                pIdKey: "pid"
-                            }
-                        }
-                    };
-                    //页面层
-                    layer.open({
-                        type: 1,
-                        skin: 'layui-layer-rim', //加上边框
-                        area: ['420px', '420px'], //宽高
-                        content: '<div style="margin: 0 auto;" class="zTreeDemoBackground left">' +
-                            '<ul id="treeDemo" style="height: 95%;" class="ztree"></ul>' +
-                            '</div>'
-                    });
-                    if(data.code == 0) {
-                        zNodes = data.data;
-                        console.log(zNodes);
-                        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
-                    }
+                //页面层
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-rim', //加上边框
+                    title: '权限分配',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['420px', '520px'], //宽高
+                    content: ctx + 'back/sysRole/toZTree/' + data_id
                 });
-                $.ajaxSettings.async = true;
             }
 
         });
@@ -215,8 +195,6 @@
             active[type] ? active[type].call(this) : '';
         });
     });
-
-
 </script>
 </body>
 </html>
