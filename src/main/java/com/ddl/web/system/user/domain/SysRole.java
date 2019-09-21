@@ -22,6 +22,8 @@ public class SysRole implements Serializable {
 
     private String remark;
 
+    private boolean checked;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getId() {
@@ -94,5 +96,13 @@ public class SysRole implements Serializable {
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 }

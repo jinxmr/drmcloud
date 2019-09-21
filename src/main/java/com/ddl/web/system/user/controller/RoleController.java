@@ -119,4 +119,18 @@ public class RoleController extends BaseController {
         model.addAttribute("dataId", dataId);
         return "system/role/assignPerm";
     }
+
+    /**
+     * 授权操作
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    @PostMapping("editRole")
+    @ResponseBody
+    public AjaxResult editRole(Integer roleId, String menuIds) {
+
+        int res = roleService.updateRolePerm(roleId, menuIds);
+        return toAjax(res);
+    }
 }

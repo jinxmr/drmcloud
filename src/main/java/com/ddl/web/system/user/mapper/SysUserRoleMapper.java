@@ -21,4 +21,6 @@ public interface SysUserRoleMapper {
     int updateByExampleSelective(@Param("record") SysUserRole record, @Param("example") SysUserRoleCriteria example);
 
     int updateByExample(@Param("record") SysUserRole record, @Param("example") SysUserRoleCriteria example);
+
+    int batchInsert(List<SysUserRole> list);
 }

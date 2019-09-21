@@ -64,6 +64,15 @@
                                />
                     </div>
                 </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-block">
+                        <span th:each="role : ${roles}">
+                            <input type="checkbox" name="roleId" th:value="${role.id}" lay-skin="primary" th:attr="title=${role.roleName}">
+                        </span>
+                    </div>
+
+                </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
@@ -117,11 +126,27 @@
 
         /* 监听提交 */
         form.on('submit(component-form-demo1)', function (data) {
+
+            //获取选中的角色
+            if ($("input:checkbox[name='roleId']:checked").length == 0) {
+                layer.msg("请选择角色", {icon: 5, shift: 6});
+                return false;
+            }
+            //获取checkbox[name='roleId']的值，获取所有选中的复选框，并将其值放入数组中
+            let arr = new Array();
+            $("input:checkbox[name='roleId']:checked").each(function(i){
+                arr[i] = $(this).val();
+            });
+            //  替换 data.field.foodId的数据为拼接后的字符串
+            data.field.roleId = arr.join(",");//将数组合并成字符串
+
             if(data.field.status == "on") {
                 data.field.status = "0";
             } else {
                 data.field.status = "1";
             }
+
+            console.log(data);
             $.ajax({
                 url: ctx + "back/sysUser/add",
                 async: false,
@@ -130,7 +155,7 @@
                 dataType: "json",
                 success: function (data) {
                     if(data.code == 0) {
-                        layer.msg(data.msg, {time: 1000, icon: 1}, function () {
+                        layer.msg(data.msg, {time: 1000, icon: 1, shade: [0.8, '#393D49']}, function () {
 
                             window.location.href = ctx + "back/sysUser";
                         });

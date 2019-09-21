@@ -38,7 +38,7 @@ public interface IUserService {
      * @param user 用户信息
      * @return 结果
      */
-    public int insertUser(SysUser user);
+    public int insertUser(SysUser user, String roleIds);
 
     /**
      * 修改用户
@@ -46,7 +46,7 @@ public interface IUserService {
      * @param user 用户信息
      * @return 结果
      */
-    public int updateUser(SysUser user);
+    public int updateUser(SysUser user, String roleIds);
 
     /**
      * 删除用户信息

@@ -5,13 +5,17 @@ import com.ddl.utils.StringUtils;
 import com.ddl.web.enums.UserDictEnums;
 import com.ddl.web.system.user.domain.SysUser;
 import com.ddl.web.system.user.domain.SysUserCriteria;
+import com.ddl.web.system.user.domain.SysUserRole;
+import com.ddl.web.system.user.domain.SysUserRoleCriteria;
 import com.ddl.web.system.user.mapper.SysUserMapper;
+import com.ddl.web.system.user.mapper.SysUserRoleMapper;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -25,6 +29,9 @@ public class UserServiceImpl implements IUserService {
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
 
     @Value("${initialize.password}")
     private String initPassword;
@@ -96,12 +103,16 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public int insertUser(SysUser user) {
+    @Transactional
+    public int insertUser(SysUser user, String roleIds) {
         verify(user);
         user.setCreateDate(new Date()); //创建时间
         user.setDelFlag(UserDictEnums.OK.getCode());    //是否删除
         user.setPassword(PasswordEncryptionUtil.encryptPassword(initPassword, user.getLoginName()));
         int res = userMapper.insert(user);
+
+        //批量插入用户角色
+        batchInsertUserRole(user, roleIds);
         return res;
     }
 
@@ -156,11 +167,40 @@ public class UserServiceImpl implements IUserService {
      * @return
      */
     @Override
-    public int updateUser(SysUser user) {
+    @Transactional
+    public int updateUser(SysUser user, String roleIds) {
 
         verify(user);
         int res = userMapper.updateByPrimaryKeySelective(user);
+
+        //删除该用户的所有角色
+        SysUserRoleCriteria userRoleCriteria = new SysUserRoleCriteria();
+        SysUserRoleCriteria.Criteria delQuery = userRoleCriteria.createCriteria();
+        delQuery.andUserIdEqualTo(user.getId());
+        userRoleMapper.deleteByExample(userRoleCriteria);
+        //批量插入用户角色
+        batchInsertUserRole(user, roleIds);
         return res;
+    }
+
+    /**
+     * 批量插入用户角色 新增/修改时
+     * @param user
+     * @param roleIds
+     */
+    private void batchInsertUserRole(SysUser user, String roleIds) {
+        if (StringUtils.isNotEmpty(roleIds)) {
+            String[] roleIdArr = roleIds.split(",");
+            List<SysUserRole> userRoleList = new ArrayList<>();
+            SysUserRole userRole = null;
+            for (String roleId : roleIdArr) {
+                userRole = new SysUserRole();
+                userRole.setRoleId(Integer.valueOf(roleId));
+                userRole.setUserId(user.getId());
+                userRoleList.add(userRole);
+            }
+            userRoleMapper.batchInsert(userRoleList);
+        }
     }
 
     /**

@@ -3,12 +3,14 @@ package com.ddl.web.system.user.service;
 
 import com.ddl.utils.ShiroUtils;
 import com.ddl.utils.StringUtils;
+import com.ddl.web.enums.UserDictEnums;
 import com.ddl.web.system.user.domain.*;
 import com.ddl.web.system.user.mapper.SysRoleMapper;
 import com.ddl.web.system.user.mapper.SysRoleMenuMapper;
 import com.ddl.web.system.user.mapper.SysUserRoleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -62,6 +64,7 @@ public class SysRoleServiceImpl implements SysRoleService {
     public List<SysRole> selectRoleList(SysRole role) {
         SysRoleCriteria roleCriteria = new SysRoleCriteria();
         SysRoleCriteria.Criteria query = roleCriteria.createCriteria();
+        query.andStatusEqualTo(String.valueOf(UserDictEnums.OK.getCode()));
         if(StringUtils.isNotEmpty(role.getRoleName())) {
             query.andRoleNameLike("%" + role.getRoleName() + "%");
         }
@@ -144,5 +147,62 @@ public class SysRoleServiceImpl implements SysRoleService {
             sysUserRoleMapper.deleteByExample(userRoleCriteria);
         }
         return res;
+    }
+
+    /**
+     * 授权操作
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    @Override
+    @Transactional
+    public int updateRolePerm(Integer roleId, String menuIds) {
+
+        //先删除在新增
+        SysRoleMenuCriteria roleMenuCriteria = new SysRoleMenuCriteria();
+        SysRoleMenuCriteria.Criteria roleMenuQuery = roleMenuCriteria.createCriteria();
+        roleMenuQuery.andRoleIdEqualTo(roleId);
+        sysRoleMenuMapper.deleteByExample(roleMenuCriteria);
+
+        String[] menuIdArr = menuIds.split(",");
+        List<SysRoleMenu> roleMenuList = new ArrayList<>();
+        SysRoleMenu roleMenu = null;
+        for(String menuId : menuIdArr) {
+            roleMenu = new SysRoleMenu();
+            roleMenu.setMenuId(Integer.valueOf(menuId));
+            roleMenu.setRoleId(roleId);
+            roleMenuList.add(roleMenu);
+        }
+        int res = sysRoleMenuMapper.batchInsert(roleMenuList);
+        return res;
+    }
+
+    /**
+     * 根据用户ID查询所有角色
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<SysRole> selectRoleListByUserId(Integer userId) {
+
+        //查询所有角色
+        SysRoleCriteria roleCriteria = new SysRoleCriteria();
+        SysRoleCriteria.Criteria query = roleCriteria.createCriteria();
+        String.valueOf(UserDictEnums.OK.getCode());
+        List<SysRole> roles = sysRoleMapper.selectByExample(roleCriteria);
+
+        //根据用户Id查询被选中的角色
+        List<SysRole> checkedRoles = sysRoleMapper.selectRolesByUserId(userId);
+        for(SysRole role : roles) {
+            for(SysRole role_1 : checkedRoles) {
+                if(role.getId() == role_1.getId()) {    //被选中
+                    role.setChecked(true);
+                }
+            }
+
+        }
+
+        return roles;
     }
 }

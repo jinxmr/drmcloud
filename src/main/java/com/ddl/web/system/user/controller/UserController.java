@@ -8,13 +8,16 @@ import com.ddl.utils.PasswordEncryptionUtil;
 import com.ddl.web.enums.BusinessType;
 import com.ddl.web.system.controller.BaseController;
 import com.ddl.web.system.generater.domain.TableInfo;
+import com.ddl.web.system.user.domain.SysRole;
 import com.ddl.web.system.user.domain.SysUser;
 import com.ddl.web.system.user.service.IUserService;
+import com.ddl.web.system.user.service.SysRoleService;
 import com.github.pagehelper.PageHelper;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +33,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private SysRoleService sysRoleService;
 
     @Value("${initialize.password}")
     private String initPassword;
@@ -58,7 +64,11 @@ public class UserController extends BaseController {
      * 新增用户
      */
     @GetMapping("/add" )
-    public String add() {
+    public String add(Model model) {
+        //查询所有权限
+        SysRole role = new SysRole();
+        List<SysRole> sysRoleList = sysRoleService.selectRoleList(role);
+        model.addAttribute("roles", sysRoleList);
         return "system/user/add" ;
     }
 
@@ -68,10 +78,10 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:add" )
     @PostMapping("/add" )
     @ResponseBody
-    public AjaxResult addSave(SysUser user) {
+    public AjaxResult addSave(SysUser user, String roleId) {
         int res = 0;
         try {
-            res = userService.insertUser(user);
+            res = userService.insertUser(user, roleId);
         } catch (RuntimeException r) {
             return AjaxResult.error(r.getMessage());
         }
@@ -85,6 +95,11 @@ public class UserController extends BaseController {
     public String edit(@PathVariable("id" ) Integer id, ModelMap mmap) {
         SysUser user =userService.selectUserById(id);
         mmap.put("user" , user);
+
+        //根据用户ID查询角色绑定信息
+        SysRole role = new SysRole();
+        List<SysRole> sysRoleList = sysRoleService.selectRoleListByUserId(id);
+        mmap.addAttribute("roles", sysRoleList);
         return "system/user/edit" ;
     }
 
@@ -94,10 +109,10 @@ public class UserController extends BaseController {
     @RequiresPermissions("system:user:edit" )
     @PostMapping("/edit" )
     @ResponseBody
-    public AjaxResult editSave(SysUser user) {
+    public AjaxResult editSave(SysUser user, String roleId) {
         int res = 0;
         try {
-            res = userService.updateUser(user);
+            res = userService.updateUser(user, roleId);
         } catch (RuntimeException r) {
             return AjaxResult.error(r.getMessage());
         }
@@ -126,7 +141,7 @@ public class UserController extends BaseController {
         SysUser sysUser = userService.selectUserById(user.getId());
         String pwd = PasswordEncryptionUtil.encryptPassword(initPassword, sysUser.getLoginName());
         user.setPassword(pwd); //赋初始化密码
-        return toAjax(userService.updateUser(user));
+        return toAjax(userService.updateUser(user, null));
     }
 
 }

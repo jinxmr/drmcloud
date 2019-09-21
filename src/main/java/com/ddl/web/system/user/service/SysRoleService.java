@@ -54,4 +54,19 @@ public interface SysRoleService {
      * @return 结果
      */
     public int deleteRoleByIds(String ids);
+
+    /**
+     * 授权操作
+     * @param roleId
+     * @param menuIds
+     * @return
+     */
+    public int updateRolePerm(Integer roleId, String menuIds);
+
+    /**
+     * 根据用户ID查询所有角色
+     * @param userId
+     * @return
+     */
+    List<SysRole> selectRoleListByUserId(Integer userId);
 }

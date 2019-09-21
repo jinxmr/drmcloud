@@ -88,14 +88,8 @@
                         </a>
                         <dl class="layui-nav-child">
                             <dd data-name="console" class="layui-this">
-                                <a th:attr="lay-href=@{/back/sysUse1r}">主页</a>
+                                <a th:attr="lay-href=@{/back/home}">主页</a>
                             </dd>
-                            <!--<dd data-name="console">
-                                <a th:attr="lay-href=@{/back/sysUser}">主页一</a>
-                            </dd>
-                            <dd data-name="console">
-                                <a th:attr="lay-href=@{/back/tool/gen}">代码生成</a>
-                            </dd>-->
                         </dl>
                     </li>
                     <li class="layui-nav-item" th:each="menu : ${menus}">
@@ -163,7 +157,7 @@
         <!-- 主体内容 -->
         <div class="layui-body" id="LAY_app_body">
             <div class="layadmin-tabsbody-item layui-show">
-                <iframe src="home/console.html" frameborder="0" class="layadmin-iframe"></iframe>
+                <iframe th:attr="src=@{/back/home}" frameborder="0" class="layadmin-iframe"></iframe>
             </div>
         </div>
 

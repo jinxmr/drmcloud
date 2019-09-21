@@ -112,7 +112,7 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ddl.web.system.user.domain.SysUser">
+  <insert id="insert" parameterType="com.ddl.web.system.user.domain.SysUser" useGeneratedKeys="true" keyProperty="id" >
     insert into sys_user (id, login_name, password, 
       work_number, user_name, email, 
       mobile, photo, login_ip, 

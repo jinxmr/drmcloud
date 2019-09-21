@@ -402,7 +402,7 @@
       m.order_sort
   </select>
 
-    <select id="selectByRoleId" resultMap="BaseResultMap_zTree">
+    <select id="selectByRoleId" parameterType="java.lang.Integer" resultMap="BaseResultMap_zTree">
       SELECT DISTINCT
           m.id,
           m.parent_id,
@@ -415,7 +415,7 @@
       FROM
         sys_menu m
       LEFT JOIN
-        sys_role_menu rm on m.id=rm.role_id
+        sys_role_menu rm on m.id=rm.menu_id and rm.role_id = #{roleId}
       ORDER BY m.order_sort
     </select>
 </mapper>

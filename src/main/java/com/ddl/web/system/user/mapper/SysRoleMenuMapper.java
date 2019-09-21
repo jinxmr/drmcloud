@@ -21,4 +21,6 @@ public interface SysRoleMenuMapper {
     int updateByExampleSelective(@Param("record") SysRoleMenu record, @Param("example") SysRoleMenuCriteria example);
 
     int updateByExample(@Param("record") SysRoleMenu record, @Param("example") SysRoleMenuCriteria example);
+
+    int batchInsert(List<SysRoleMenu> list);
 }

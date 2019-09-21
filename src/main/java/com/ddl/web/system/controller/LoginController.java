@@ -65,4 +65,9 @@ public class LoginController {
         model.addAttribute("user", sysUser);
         return "index";
     }
+
+    @GetMapping("home")
+    public String home(Model model, HttpServletRequest request) {
+        return "console";
+    }
 }

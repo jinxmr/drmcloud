@@ -137,4 +137,12 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
+
+  <insert id="batchInsert" parameterType="com.ddl.web.system.user.domain.SysRoleMenu">
+    insert into sys_role_menu (role_id, menu_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+    (#{item.roleId,jdbcType=INTEGER}, #{item.menuId,jdbcType=INTEGER})
+    </foreach>
+  </insert>
 </mapper>
