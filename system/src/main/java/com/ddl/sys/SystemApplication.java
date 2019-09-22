@@ -14,6 +14,7 @@ import java.util.TimeZone;
 public class SystemApplication {
 
     public static void main(String[] args) {
+        System.out.println("SpringCloud");
         SpringApplication.run(SystemApplication.class, args);
     }
 
