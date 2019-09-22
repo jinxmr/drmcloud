@@ -27,12 +27,12 @@
                 <div class="layui-card-header">角色列表</div>
                 <div class="layui-card-body">
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="sys:role:remove"
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="system:role:remove"
                                 data-type="removes">删除
                         </button>
                     </div>
                     <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
-                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="sys:role:add" data-type="add">新增
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="system:role:add" data-type="add">新增
                         </button>
                     </div>
                     <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
@@ -55,9 +55,9 @@
     </div>
 </div>
 <script type="text/html" id="row_opt">
-    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="sys:role:edit">查看</a>
-    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="sys:role:remove">删除</a>
-    <a class="layui-btn layui-btn-blue layui-btn-xs" lay-event="dist" shiro:hasPermission="sys:role:dist">分配权限</a>
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="system:role:edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="system:role:remove">删除</a>
+    <a class="layui-btn layui-btn-blue layui-btn-xs" lay-event="dist" shiro:hasPermission="system:role:dist">分配权限</a>
 </script>
 <script type="text/html" id="switchTpl">
     <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{

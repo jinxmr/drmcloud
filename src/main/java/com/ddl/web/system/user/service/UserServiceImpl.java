@@ -211,12 +211,19 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public int deleteUserByIds(String ids) {
+        //删除用户
         SysUserCriteria userCriteria = new SysUserCriteria();
         SysUserCriteria.Criteria query = userCriteria.createCriteria();
         String[] idArr = ids.split(",");
         List<Integer> idList = StringUtils.arrToList(idArr);
         query.andIdIn(idList);
         int res = userMapper.deleteByExample(userCriteria);
+
+        //删除用户绑定的权限
+        SysUserRoleCriteria userRoleCriteria = new SysUserRoleCriteria();
+        SysUserRoleCriteria.Criteria userRoleQuery = userRoleCriteria.createCriteria();
+        userRoleQuery.andUserIdIn(idList);
+        userRoleMapper.deleteByExample(userRoleCriteria);
         return res;
     }
 }
