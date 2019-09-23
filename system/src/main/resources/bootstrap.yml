@@ -3,6 +3,13 @@ server:
 spring:
   profiles:
     active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: drm-config
+
   thymeleaf:
     prefix: classpath:templates/
     check-template-location: true
@@ -14,7 +21,7 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: Asia/Shanghai
   application:
-    name: ruoyi-system
+    name: drm-system
 
 # 日志配置
 logging:

@@ -1,0 +1,33 @@
+#eureka注册中心地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1001/eureka/
+#启动端口
+server:
+  port: 8080
+
+#应用名（server-id）
+spring:
+  application:
+    name: drm-config
+
+  #cloud-server配置
+  cloud:
+    config:
+      server:
+        git:
+          #         git地址
+          uri: https://gitee.com/jinxm/drm-config.git
+          #         git账号密码
+          username: jinxmsir@163.com
+          password: caoniba741
+          #         本地仓库
+          basedir: E:/myProject/drm-config
+
+#暴露/actuator/bus-refresh接口(动态刷新配置文件需要)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
