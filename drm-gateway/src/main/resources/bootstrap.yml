@@ -1,0 +1,29 @@
+server:
+  port: 8081
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1001/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址
+spring:
+  profiles:
+    active: dev
+  cloud:
+    gateway:
+      routes:
+        - id: path_route
+          uri: http://localhost:8088
+          order: 0
+          predicates:
+            - Path=/sys/**
+          filters:
+            - StripPrefix=1
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: drm-config
+  application:
+    name: drm-gateway

@@ -32,4 +32,10 @@ public class testController {
         SysUser user = userService.selectUserById(1);
         return user.toString();
     }
+
+    @GetMapping("hello")
+    @ResponseBody
+    public String test2(String name) {
+        return "hello," + name;
+    }
 }

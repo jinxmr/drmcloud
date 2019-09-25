@@ -125,7 +125,7 @@ public class ShiroConfig {
         shiroFilterFactoryBean.setFilters(filters);
 
         // 所有请求需要认证
-        filterChainDefinitionMap.put("/**", "authc");
+        filterChainDefinitionMap.put("/back/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         shiroFilterFactoryBean.setUnauthorizedUrl("/403");
