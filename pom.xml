@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.ddl</groupId>
-	<artifactId>drm</artifactId>
+	<artifactId>drmcloud</artifactId>
 	<version>1.0</version>
-	<name>drm</name>
+	<name>drmcloud</name>
 	<packaging>jar</packaging>
 	<description>Spring Boot Try</description>
 

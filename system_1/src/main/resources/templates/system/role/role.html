@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <link rel="stylesheet" href="../../../static/layuiadmin/layui/css/layui.css"
+          th:href="@{/layuiadmin/layui/css/layui.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/layuiadmin/style/admin.css"
+          th:href="@{/layuiadmin/style/admin.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/demo.css"
+          th:href="@{/zTree_v3/css/demo.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/zTreeStyle/zTreeStyle.css"
+          th:href="@{/zTree_v3/css/zTreeStyle/zTreeStyle.css}"
+          media="all">
+</head>
+<body>
+<style>
+    a {
+        text-decoration:none;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">角色列表</div>
+                <div class="layui-card-body">
+                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="system:role:remove"
+                                data-type="removes">删除
+                        </button>
+                    </div>
+                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="system:role:add" data-type="add">新增
+                        </button>
+                    </div>
+                    <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
+                          style="margin-top: 20px;">
+                        <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+                            角色名称：
+                            <div class="layui-inline">
+                                <input class="layui-input" name="roleName" id="roleName" autocomplete="off">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="layui-btn" type="button"
+                                    data-type="reload">搜索
+                            </button>
+                        </div>
+                    </form>
+
+                    <table class="layui-hide" id="tables" lay-filter="tables"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="row_opt">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="system:role:edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="system:role:remove">删除</a>
+    <a class="layui-btn layui-btn-blue layui-btn-xs" lay-event="dist" shiro:hasPermission="system:role:dist">分配权限</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{
+           d.status== 0 ? 'checked' : '' }}>
+</script>
+<script src="../../../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}"></script>
+<script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.core.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.core.min.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.excheck.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.excheck.min.js}"></script>
+<script th:inline="javascript"> var ctx = [[@{
+    /}]]; var captchaType = [[${captchaType}]];
+</script>
+<script th:inline="none">
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'index', 'table', 'laydate'], function () {
+
+        var table = layui.table;
+        table.render({
+            elem: '#tables'
+            , id: 'tbReload'
+            , method: 'GET'
+            , url: ctx + 'back/sysRole/list'
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , title: '用户数据表'
+            , fitColumns: true
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'roleName', title: '角色名称', sort: true}
+                , {
+                    field: 'status',
+                    title: '角色状态',
+                    templet: function (e) {
+                        let status = e.status;
+                        if (status == 0) {
+                            return "正常";
+                        } else if (status == 1) {
+                            return "停用";
+                        } else {
+                            return "未知";
+                        }
+                    }
+                }
+                , {field: 'createTime', title: '创建时间', sort: true}
+                , {fixed: 'right', title: '操作', toolbar: '#row_opt', width: 200}
+
+            ]]
+            , page: true
+        });
+        var form = layui.form, layer = layui.layer;
+
+        //监听状态操作
+        form.on('switch(status)', function (obj) {
+            var userId = obj.elem.value;
+            var checked = obj.elem.checked ? 0 : 1;
+            $.post(ctx + "back/sysUser/edit", {id: userId, status: checked}, function (data) {
+                layer.msg(data.msg);
+            });
+        });
+
+        //监听行工具事件
+        table.on('tool(tables)', function (obj) {
+            let data = obj.data;
+            let data_id = data.id;
+            if (obj.event === 'edit') {  //修改
+                window.location.href = ctx + 'back/sysRole/edit/' + data_id;
+            } else if (obj.event === 'remove') {    //删除
+                layer.confirm('确定要删除该角色吗?', function (index) {
+                    $.post(ctx + "back/sysRole/remove", {ids: data_id}, function (data) {
+                        layer.msg(data.msg);
+                        if (data.code == 0) {
+                            table.reload("tbReload");
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'dist') {
+                //页面层
+                layer.open({
+                    type: 2,
+                    skin: 'layui-layer-rim', //加上边框
+                    title: '权限分配',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['420px', '520px'], //宽高
+                    content: ctx + 'back/sysRole/toZTree/' + data_id
+                });
+            }
+
+        });
+
+        var $ = layui.$, active = {
+            removes: function () { //获取选中数据
+                let checkStatus = table.checkStatus('tbReload')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg(`请选择操作数据`);
+                    return;
+                }
+                let ids = "";
+                for (let i in data) {
+                    ids += data[i].id + ",";
+                }
+                $.post(ctx + "back/sysRole/remove", {ids: ids}, function (data) {
+                    layer.msg(data.msg);
+                    if (data.code == 0) {
+                        table.reload('tbReload');
+                    }
+                })
+            },
+            add: function () { //新增
+                location.href = ctx + "back/sysRole/add";
+            },
+            reload: function () {
+                let roleName = $('#roleName').val();
+                //执行重载
+                table.reload('tbReload', {
+                    where: {
+                        roleName: roleName
+                    }
+                });
+            }
+        };
+
+        $('.test-table-reload-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $('.test-table-operate-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

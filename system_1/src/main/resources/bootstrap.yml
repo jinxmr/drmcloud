@@ -1,0 +1,60 @@
+server:
+  port: 8089
+spring:
+  profiles:
+    active: dev
+  cloud:
+    config:
+      fail-fast: true
+      discovery:
+        enabled: true
+        service-id: drm-config
+
+  thymeleaf:
+    prefix: classpath:templates/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: Asia/Shanghai
+  application:
+    name: drm-system
+
+# 日志配置
+logging:
+  level:
+    org.springframework.web: DEBUG
+    com.ddl.sys.web.system.generater.mapper: debug
+    com.ddl.sys.web.system.user.mapper: debug
+  file:
+    max-size: 50M
+
+gen:
+  author: drm
+  packageName: com.ddl.sys.web.system
+  autoRemovePre: true
+  tablePrefix: sys_
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+initialize:
+  password: 123456
+
+shiro:
+  user:
+    loginUrl: back/login
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1001/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true     #访问路径可以显示IP地址

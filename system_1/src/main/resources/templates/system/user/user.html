@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <link rel="stylesheet" href="../../../static/layuiadmin/layui/css/layui.css"
+          th:href="@{/layuiadmin/layui/css/layui.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/layuiadmin/style/admin.css"
+          th:href="@{/layuiadmin/style/admin.css}"
+          media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">用户列表</div>
+                <div class="layui-card-body">
+                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-danger" shiro:hasPermission="system:user:remove" data-type="removes">删除</button>
+                    </div>
+                    <div class="layui-btn-group test-table-operate-btn" style="margin-bottom: 10px;">
+                        <button class="layui-btn layui-btn-blue" shiro:hasPermission="system:user:add" data-type="add">新增</button>
+                    </div>
+                    <form id="articleSearch" class="layui-form layui-form-pane" method="get" action=""
+                          style="margin-top: 20px;">
+                        <div class="test-table-reload-btn" style="margin-bottom: 10px;">
+                            登录账号：
+                            <div class="layui-inline">
+                                <input class="layui-input" name="loginName" id="loginName" autocomplete="off">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                            用户姓名：
+                            <div class="layui-inline">
+                                <input class="layui-input" name="userName" id="userName" autocomplete="off">
+                            </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button class="layui-btn" type="button"
+                                    data-type="reload">搜索
+                            </button>
+                        </div>
+                    </form>
+
+                    <table class="layui-hide" id="tables" lay-filter="tables"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="row_opt">
+    <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="edit" shiro:hasPermission="system:user:edit">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="remove" shiro:hasPermission="system:user:remove">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="pwdReset" shiro:hasPermission="system:user:reset">密码重置</a>
+</script>
+<script type="text/html" id="switchTpl">
+    <input type="checkbox" name="status" value="{{d.id}}" lay-skin="switch" lay-text="启用|停用" lay-filter="status" {{
+           d.status== 0 ? 'checked' : '' }}>
+</script>
+<script src="../../../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}"></script>
+<script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script th:inline="javascript"> var ctx = [[@{
+    /}]]; var captchaType = [[${captchaType}]];
+</script>
+<script th:inline="none">
+    layui.config({
+        base: '/layuiadmin/' //静态资源所在路径
+    }).extend({
+        index: 'lib/index' //主入口模块
+    }).use(['form', 'index', 'table', 'laydate'], function () {
+        /*var kw = "";
+        addData(kw);*/
+
+        var table = layui.table;
+        table.render({
+            elem: '#tables'
+            , id: 'tbReload'
+            , method: 'GET'
+            , url: ctx + 'back/sysUser/list'
+            , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            , title: '用户数据表'
+            , fitColumns: true
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'loginName', title: '登录账号', sort: true}
+                , {field: 'userName', title: '用户姓名'}
+                , {
+                    field: 'sex',
+                    title: '性别',
+                    sort: true,
+                    templet: function (e) {
+                        switch (e.status) {
+                            case 0:
+                                return "男";
+                            case 1:
+                                return "女";
+                            default:
+                                return "未知";
+                        }
+
+                    }
+
+                }
+                , {field: 'email', title: '邮箱', sort: true}
+                , {field: 'mobile', title: '手机号'}
+                , {field: 'loginIp', title: '最后登录IP'}
+                , {field: 'loginDate', title: '最后登录时间'}
+                , {
+                    field: 'status',
+                    title: '状态',
+                    sort: true,
+                    templet: '#switchTpl',
+                }
+                , {fixed: 'right', title: '操作', toolbar: '#row_opt', width: 200}
+
+            ]]
+            , page: true
+        });
+        var form = layui.form, layer = layui.layer;
+
+        //监听状态操作
+        form.on('switch(status)', function (obj) {
+            var userId = obj.elem.value;
+            var checked = obj.elem.checked ? 0 : 1;
+            $.post(ctx + "back/sysUser/edit", {id: userId, status: checked}, function (data) {
+                layer.msg(data.msg);
+            });
+        });
+
+        //监听行工具事件
+        table.on('tool(tables)', function (obj) {
+            let data = obj.data;
+            let data_id = data.id;
+            if (obj.event === 'edit') {  //修改
+                window.location.href = ctx + 'back/sysUser/edit/' + data_id;
+            } else if (obj.event === 'remove') {    //删除
+                layer.confirm('确定要删除该用户吗?', function (index) {
+                    $.post(ctx + "back/sysUser/remove", {ids: data_id}, function (data) {
+                        layer.msg(data.msg);
+                        if (data.code == 0) {
+                            table.reload("tbReload");
+                        }
+                    });
+                    layer.close(index);
+                });
+            } else if (obj.event === 'pwdReset') {   //密码重置
+                layer.confirm('确定要重置该用户的密码吗?', function (index) {
+                    $.post(ctx + "back/sysUser/reset", {id: data_id}, function (data) {
+                        layer.msg(data.msg);
+                    });
+                    layer.close(index);
+                });
+            }
+
+        });
+
+        var $ = layui.$, active = {
+            removes: function () { //获取选中数据
+                let checkStatus = table.checkStatus('tbReload')
+                    , data = checkStatus.data;
+                if (data.length == 0) {
+                    layer.msg(`请选择操作数据`);
+                    return;
+                }
+                let ids = "";
+                for (let i in data) {
+                    ids += data[i].id + ",";
+                }
+                $.post(ctx + "back/sysUser/remove", {ids: ids}, function (data) {
+                    layer.msg(data.msg);
+                    if (data.code == 0) {
+                        table.reload('tbReload');
+                    }
+                })
+            },
+            add: function () { //新增
+                location.href = ctx + "back/sysUser/add";
+            },
+            reload: function () {
+                let loginName = $('#loginName').val();
+                let userName = $('#userName').val();
+                //执行重载
+                table.reload('tbReload', {
+                    where: {
+                        loginName: loginName,
+                        userName: userName
+                    }
+                });
+            }
+        };
+
+        $('.test-table-reload-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        $('.test-table-operate-btn .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+</body>
+</html>

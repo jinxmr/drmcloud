@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../../static/layuiadmin/layui/css/layui.css"
+          th:href="@{/layuiadmin/layui/css/layui.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/layuiadmin/style/admin.css"
+          th:href="@{/layuiadmin/style/admin.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/layuiadmin/layui/css/modules/layer/default/layer.css"
+          th:href="@{/layuiadmin/layui/css/modules/layer/default/layer.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/demo.css"
+          th:href="@{/zTree_v3/css/demo.css}"
+          media="all">
+    <link rel="stylesheet" href="../../../static/zTree_v3/css/zTreeStyle/zTreeStyle.css"
+          th:href="@{/zTree_v3/css/zTreeStyle/zTreeStyle.css}"
+          media="all">
+</head>
+<body>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding: 15px;">
+            <div style="margin: 0 auto;" class="zTreeDemoBackground left">
+                <ul id="editTree" style="height: 95%;" class="ztree"></ul>
+            </div>
+        </div>
+        <div class="layui-btn-group" style="float: right;">
+            <button type="button" id="editRole" class="layui-btn">确定</button>
+        </div>
+    </div>
+</div>
+
+<script src="../../../static/jquery/jquery.min.js" th:src="@{/jquery/jquery.min.js}"></script>
+<script src="../../../static/layuiadmin/layui/layui.js" th:src="@{/layuiadmin/layui/layui.js}"></script>
+<script src="../../../static/layuiadmin/layui/lay/modules/layer.js" th:src="@{/layuiadmin/layui/lay/modules/layer.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.core.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.core.min.js}"></script>
+<script src="../../../static/zTree_v3/js/jquery.ztree.excheck.min.js"
+        th:src="@{/zTree_v3/js/jquery.ztree.excheck.min.js}"></script>
+<script th:inline="javascript"> var ctx = [[@{
+    /}]]; var captchaType = [[${captchaType}]];
+</script>
+<script th:inline="javascript">
+    var zNodes = [];
+    var data_id = [[${dataId}]];
+    //加载权限树结构数据
+    $(function() {
+        $.get(ctx + "system/menu/zTreeList", {roleId: data_id}, function (data) {
+            var setting = {
+                check: {
+                    enable: true
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        pIdKey: "pid"
+                    }
+                }
+            };
+
+            if(data.code == 0) {
+                zNodes = data.data;
+                $.fn.zTree.init($("#editTree"), setting, zNodes);
+            }
+        });
+    });
+
+
+    /** 获取选中的节点 **/
+    function getCheckedNodes(treeId) {
+        var treeObj = $.fn.zTree.getZTreeObj(treeId);
+        var checkedNodes = treeObj.getCheckedNodes();
+        var ids = "";
+        if(checkedNodes == null || checkedNodes.length == 0) {
+            return null;
+        }
+        for (var i = 0; i < checkedNodes.length; i++) {
+            var id = checkedNodes[i].id;
+            ids += id + ",";
+        }
+        return ids.substring(0, ids.length - 1);
+    }
+
+    $("#editRole").on('click', function() {
+        var ids = getCheckedNodes("editTree");    //选中的菜单节点
+        if(ids == null || ids == "") {
+            layer.msg("请选择权限");
+            return;
+        }
+        $.post(ctx + 'back/sysRole/editRole', {
+            roleId: data_id,
+            menuIds: ids
+        }, function (data) {
+            if (data.code == 0) {
+                layer.alert(data.msg, function (index) {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                });
+            } else {
+                layer.alert(data.msg);
+            }
+        })
+    });
+</script>
+</body>
+</html>
