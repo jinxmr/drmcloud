@@ -14,6 +14,7 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +44,7 @@ public class UserServiceImpl implements IUserService {
      * @return 用户对象信息
      */
     @Override
+    @Cacheable(value = "user", key = "#userId")
     public SysUser selectUserById(Integer userId) {
         return userMapper.selectByPrimaryKey(userId);
     }

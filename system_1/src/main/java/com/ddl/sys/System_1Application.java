@@ -11,11 +11,11 @@ import java.util.TimeZone;
 @SpringBootApplication
 @EnableEurekaClient
 @MapperScan("com.ddl.sys.web.system.*.mapper")
-public class SystemApplication {
+public class System_1Application {
 
     public static void main(String[] args) {
         System.out.println("SpringCloud");
-        SpringApplication.run(SystemApplication.class, args);
+        SpringApplication.run(System_1Application.class, args);
     }
 
     @PostConstruct

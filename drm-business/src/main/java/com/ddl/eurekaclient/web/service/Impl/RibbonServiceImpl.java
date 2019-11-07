@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class RibbonServiceImpl implements RibbonService {
 
-    public String helloService(String name) {
+    public String helloService(Integer userId) {
         return "hello,这是本地的";
     }
 }

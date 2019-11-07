@@ -24,10 +24,24 @@ spring:
           password: caoniba741
           #         本地仓库
           basedir: E:/myProject/drm-config
+          default-label: master
+      profile: dev
+    bus:
+      refresh:
+        enabled: true
+      trace:
+        enabled: true
+  rabbitmq:
+    host: 47.94.194.140
+    port: 5672
+    username: guest
+    password: guest
+
 
 #暴露/actuator/bus-refresh接口(动态刷新配置文件需要)
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
+        include: bus-refresh
+foo: foo

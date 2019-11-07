@@ -1,0 +1,16 @@
+#eureka注册中心地址
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:1001/eureka/
+#应用名（server-id）
+spring:
+  application:
+    name: drm-rabbitmq
+  rabbitmq:
+    host: 47.94.194.140
+    port: 5672
+    username: guest
+    password: guest
+server:
+  port: 9999

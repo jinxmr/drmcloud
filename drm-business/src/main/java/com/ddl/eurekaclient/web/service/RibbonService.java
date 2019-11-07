@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RibbonService {
 
     @RequestMapping(value = "/test/hello",method = RequestMethod.GET)
-    String helloService(@RequestParam(value = "name") String name);
+    String helloService(@RequestParam(value = "userId") Integer userId);
 }

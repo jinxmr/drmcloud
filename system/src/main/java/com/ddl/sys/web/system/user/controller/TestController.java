@@ -36,7 +36,8 @@ public class TestController {
 
     @GetMapping("hello")
     @ResponseBody
-    public String test2(String name) {
-        return "hello," + name + ",这是system模块！";
+    public String test2(Integer userId) {
+        SysUser user = userService.selectUserById(userId);
+        return user.toString()+"_System";
     }
 }

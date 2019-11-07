@@ -1,6 +1,18 @@
 server:
   port: 8088
 spring:
+  redis:
+    database: 1
+    host: 47.94.194.140
+    port: 6379
+    password: cwt521..      # 密码（默认为空）
+    timeout: 6000ms  # 连接超时时长（毫秒）
+    lettuce:
+      pool:
+        max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+        max-wait: -1ms      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-idle: 10      # 连接池中的最大空闲连接
+        min-idle: 5       # 连接池中的最小空闲连接
   profiles:
     active: dev
   cloud:
@@ -9,6 +21,17 @@ spring:
       discovery:
         enabled: true
         service-id: drm-config
+    server:
+      git:
+        #         git地址
+        uri: https://gitee.com/jinxm/drm-config.git
+        #         git账号密码
+        username: jinxmsir@163.com
+        password: caoniba741
+        #         本地仓库
+        basedir: E:/myProject/drm-config
+        default-label: master
+      profile: dev
 
   thymeleaf:
     prefix: classpath:templates/
@@ -22,6 +45,18 @@ spring:
     time-zone: Asia/Shanghai
   application:
     name: drm-system
+  rabbitmq:
+    host: 47.94.194.140
+    port: 5672
+    username: jxm
+    password: caoniba741..
+
+#暴露/actuator/bus-refresh接口(动态刷新配置文件需要)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
 
 # 日志配置
 logging:
