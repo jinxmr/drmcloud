@@ -95,13 +95,6 @@
         </dependency>
         <!--org.mybatis.generator -->
 
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.0</version>
-        </dependency>
-
         <!-- slf4j-api日志 -->
         <dependency>
             <groupId>org.slf4j</groupId>
