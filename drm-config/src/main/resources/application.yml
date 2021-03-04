@@ -20,8 +20,8 @@ spring:
           #         git地址
           uri: https://gitee.com/jinxm/drm-config.git
           #         git账号密码
-          username: jinxmsir@163.com
-          password: caoniba741
+          username: xxxxxx
+          password: xxxxxx
           #         本地仓库
           basedir: E:/myProject/drm-config
           default-label: master
@@ -32,7 +32,7 @@ spring:
       trace:
         enabled: true
   rabbitmq:
-    host: 47.94.194.140
+    host: xxxxxx
     port: 5672
     username: guest
     password: guest
